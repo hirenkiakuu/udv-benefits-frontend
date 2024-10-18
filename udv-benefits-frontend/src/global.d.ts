@@ -1,4 +1,4 @@
-declare module '*.css' { // заменить на *.scss
+declare module '*.scss' {
     interface IClassNames {
         [className: string]: string
     }

@@ -1,7 +1,7 @@
-import cls from './Button.module.css';
+import './Button.module.scss';
 
 const Button = () => {
-    return <button className={cls.something}>jhgjfhgjfhgj</button>
+    return <button>jhgjfhgjfhgj</button>
 }
 
 export default Button;

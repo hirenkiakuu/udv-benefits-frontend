@@ -1,13 +1,13 @@
 import webpack from 'webpack';
 import { BuildOptions } from './types/config';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 export function buildLoaders(options: BuildOptions) : webpack.RuleSetRule[] {
 
     const cssLoader = {
-        test: /\.css$/, // поменять регулярку
+        test: /\.s[ac]ss$/i,
         use: [
-            'style-loader', 
-
+            options.isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 
             {
               loader: 'css-loader',
               options: {
@@ -19,9 +19,8 @@ export function buildLoaders(options: BuildOptions) : webpack.RuleSetRule[] {
                   namedExport: false 
                 }
               }
-            }   
-
-            // добавить sass loader
+            },
+            "sass-loader",
         ]
     };
 
