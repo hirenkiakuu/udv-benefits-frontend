@@ -1,6 +1,7 @@
 import webpack from "webpack";
 import { BuildOptions } from "./types/config";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import reactRefreshBabel from "react-refresh/babel";
 
 export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
   const cssLoader = {
@@ -41,6 +42,7 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
             },
           ],
         ],
+        plugins: [options.isDev && reactRefreshBabel].filter(Boolean),
       },
     },
   };
