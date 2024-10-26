@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { classNames } from "../shared/lib/classNames/classNames";
+import "./styles/index.scss";
+import Heading from "shared/ui/Heading/Heading";
 
 const App = () => {
   return (
     <>
-      <h1>Hello world</h1>
+      <Heading size="medium">H1 Demibold</Heading>
       <Outlet />
     </>
   );

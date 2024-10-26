@@ -1,0 +1,58 @@
+:root {
+  --font-family-body-golos: "Golos Text";
+  //   --font-family-body-hero: 0;
+  //   --font-family-heading: 0;
+
+  --text-size-body-l: 16px;
+  --text-size-body-m: 14px;
+
+  --text-size-heading-l: 32px;
+  --text-size-heading-m: 24px;
+
+  //   colors
+
+  --color-dark-blue: #003b4c;
+  --color-light-vio: #dccfec;
+  --color-yellow: #d8f69a;
+
+  --color-mint-1: #30cf9f;
+  --color-mint-2: #60d3b3;
+  --color-mint-3: #91dec9;
+  --color-mint-4: #c1e7dd;
+
+  --color-graphite-1: #394a4f;
+  --color-graphite-2: #677377;
+  --color-graphite-3: #959ea1;
+  --color-graphite-4: #c3c7c9;
+
+  --color-violet-1: #8a4a97;
+  --color-violet-2: #a474ad;
+  --color-violet-3: #be9ec5;
+  --color-violet-4: #d8c8db;
+
+  --color-white: #f8f9fa;
+}
+
+@font-face {
+  font-family: "Golos Text";
+  src: url("../../shared/assets/fonts/golos/GolosText-SemiBold.ttf")
+    format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Golos Text";
+  src: url("../../shared/assets/fonts/golos/GolosText-Medium.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Golos Text";
+  src: url("../../shared/assets/fonts/golos/GolosText-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
