@@ -25,6 +25,28 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     ],
   };
 
+  const assetLoader = {
+    test: /\.(png|jpg|jpeg|gif)$/i,
+    type: "asset/resource",
+  };
+
+  const svgrLoader = {
+    test: /\.svg$/i,
+    use: [
+      {
+        loader: "@svgr/webpack",
+        options: {
+          icon: true,
+        },
+      },
+    ],
+  };
+
+  const fontLoader = {
+    test: /\.(woff|woff2|eot|ttf|otf)$/i,
+    type: "asset/resource",
+  };
+
   const babelLoader = {
     test: /\.tsx?$/,
     exclude: /node_modules/,
@@ -47,5 +69,5 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     },
   };
 
-  return [cssLoader, babelLoader];
+  return [assetLoader, cssLoader, fontLoader, babelLoader, svgrLoader];
 }
