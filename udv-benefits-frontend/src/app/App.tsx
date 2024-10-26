@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { classNames } from "../shared/lib/classNames/classNames";
 
 const App = () => {
   return (

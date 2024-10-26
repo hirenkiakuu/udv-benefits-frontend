@@ -29,8 +29,6 @@ export function buildWebpackConfig(
 }
 
 // TODO
-// - add jest / RTL
-// - configurate babel in config
 // - add storybook
 // - add FSD scaffolding
 // - add index css style files
