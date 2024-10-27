@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import "./styles/index.scss";
 import Heading from "shared/ui/Heading/Heading";
 import Button from "shared/ui/Button/Button";
+import Input from "shared/ui/Input/Input";
 
 const App = () => {
   return (
@@ -43,6 +44,11 @@ const App = () => {
         <Button variant="link" size="large" disabled>
           Button
         </Button>
+      </div>
+
+      <div style={{ display: "flex", gap: "10px" }}>
+        <Input placeholder="input" />
+        <Input disabled />
       </div>
     </>
   );
