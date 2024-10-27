@@ -1,17 +1,42 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Button from "./Button";
 
 describe("Button component tests", () => {
-  test("test render", () => {
-    render(<Button />);
-    expect(screen.getByText("button is clicked: false")).toBeInTheDocument();
-    screen.debug();
-  });
-
-  test("button click test", () => {
-    render(<Button />);
-    const button = screen.getByText("button is clicked: false");
-    fireEvent.click(button);
-    expect(screen.getByText("button is clicked: true")).toBeInTheDocument();
-  });
+  test.each<{
+    size: "large" | "small";
+    variant: "primary" | "default" | "text" | "link";
+    expectedClass: string;
+  }>([
+    {
+      size: "large",
+      variant: "primary",
+      expectedClass: "button primary large",
+    },
+    {
+      size: "small",
+      variant: "default",
+      expectedClass: "button default small",
+    },
+    {
+      size: "large",
+      variant: "text",
+      expectedClass: "button text large",
+    },
+    {
+      size: "small",
+      variant: "link",
+      expectedClass: "button link small",
+    },
+  ])(
+    "applies correct class based on parameters",
+    ({ size, variant, expectedClass }) => {
+      render(
+        <Button size={size} variant={variant}>
+          test
+        </Button>
+      );
+      const button = screen.getByText("test");
+      expect(button).toHaveClass(expectedClass);
+    }
+  );
 });

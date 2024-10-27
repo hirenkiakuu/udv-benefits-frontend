@@ -5,6 +5,7 @@
 
   --text-size-body-l: 16px;
   --text-size-body-m: 14px;
+  --text-size-body-s: 12px;
 
   --text-size-heading-l: 32px;
   --text-size-heading-m: 24px;
@@ -31,6 +32,9 @@
   --color-violet-4: #d8c8db;
 
   --color-white: #f8f9fa;
+
+  --color-link-button: #1677ff;
+  --color-link-button--hovered: #1677ff; // возможно лишнее
 }
 
 @font-face {
