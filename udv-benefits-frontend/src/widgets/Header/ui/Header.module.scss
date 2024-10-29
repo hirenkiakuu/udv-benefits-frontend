@@ -1,0 +1,17 @@
+.header {
+  padding: 18px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-height: var(--header-height);
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-button {
+  font-weight: 500;
+}
