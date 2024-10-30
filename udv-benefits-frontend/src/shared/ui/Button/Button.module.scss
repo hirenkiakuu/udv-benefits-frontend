@@ -126,49 +126,49 @@
           box-shadow: 0 0px 3px 0 var(--color-mint-shadow);
           bottom: 1px;
         }
-
-        .active {
-          &:after {
-            position: absolute;
-            content: "";
-            background: var(--color-mint-1);
-            width: calc(100% - 30px);
-            height: 2px;
-            border-radius: 50px;
-            box-shadow: 0 0px 3px 0 var(--color-mint-shadow);
-            bottom: 1px;
-          }
-        }
       }
 
-      &.small {
-        &:hover {
-          box-shadow: 0 1px 0 0 rgba(193, 231, 221, 0.2);
-          background: rgba(195, 199, 201, 0.5);
+      &.active {
+        &:after {
+          position: absolute;
+          content: "";
+          background: var(--color-mint-1);
+          width: calc(100% - 30px);
+          height: 2px;
+          border-radius: 50px;
+          box-shadow: 0 0px 3px 0 var(--color-mint-shadow);
+          bottom: 1px;
         }
       }
     }
 
-    &.link {
-      color: var(--color-link-button);
-      background: transparent;
+    &.small {
+      &:hover {
+        box-shadow: 0 1px 0 0 rgba(193, 231, 221, 0.2);
+        background: rgba(195, 199, 201, 0.5);
+      }
+    }
+  }
 
-      &.large,
-      &.small {
-        &:hover:not(:disabled) {
-          opacity: 0.64; // вместо отдельной переменной
-        }
+  &.link {
+    color: var(--color-link-button);
+    background: transparent;
 
-        &:disabled {
-          color: var(--color-graphite-3);
-        }
+    &.large,
+    &.small {
+      &:hover:not(:disabled) {
+        opacity: 0.64; // вместо отдельной переменной
       }
 
-      &.large {
-        &:active:not(:disabled) {
-          opacity: 1;
-          color: #0f73ff;
-        }
+      &:disabled {
+        color: var(--color-graphite-3);
+      }
+    }
+
+    &.large {
+      &:active:not(:disabled) {
+        opacity: 1;
+        color: #0f73ff;
       }
     }
   }

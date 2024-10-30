@@ -7,6 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   variant?: "primary" | "default" | "text" | "link";
   size?: "small" | "large";
+  isActive?: boolean;
 }
 
 export const Button = ({
@@ -14,11 +15,12 @@ export const Button = ({
   children,
   variant = "default",
   size = "small",
+  isActive = false,
   ...props
 }: ButtonProps) => {
   return (
     <button
-      className={classNames(cls.button, {}, [
+      className={classNames(cls.button, { [cls.active]: isActive }, [
         className,
         cls[variant],
         cls[size],
