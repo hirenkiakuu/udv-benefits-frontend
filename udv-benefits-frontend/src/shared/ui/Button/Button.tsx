@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "small" | "large";
 }
 
-const Button = ({
+export const Button = ({
   className,
   children,
   variant = "default",
@@ -29,5 +29,3 @@ const Button = ({
     </button>
   );
 };
-
-export default Button;

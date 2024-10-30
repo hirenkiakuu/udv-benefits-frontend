@@ -93,10 +93,22 @@
   &.text {
     background: transparent;
     color: var(--color-graphite-1);
+    position: relative;
+
     &.large {
       &:hover:not(:disabled) {
-        box-shadow: 0 2px 0 0 rgba(193, 231, 221, 0.2);
-        background: rgba(195, 199, 201, 0.5);
+        color: var(--color-graphite-2);
+
+        &:after {
+          position: absolute;
+          content: "";
+          background: var(--color-mint-2);
+          width: calc(100% - 30px);
+          height: 2px;
+          border-radius: 50px;
+          box-shadow: 0 0px 3px 0 var(--color-mint-shadow);
+          bottom: 1px;
+        }
       }
 
       &:disabled {
@@ -104,37 +116,59 @@
       }
 
       &:active:not(:disabled) {
-        background: var(--color-graphite-4);
+        &:after {
+          position: absolute;
+          content: "";
+          background: var(--color-mint-1);
+          width: calc(100% - 30px);
+          height: 2px;
+          border-radius: 50px;
+          box-shadow: 0 0px 3px 0 var(--color-mint-shadow);
+          bottom: 1px;
+        }
+
+        .active {
+          &:after {
+            position: absolute;
+            content: "";
+            background: var(--color-mint-1);
+            width: calc(100% - 30px);
+            height: 2px;
+            border-radius: 50px;
+            box-shadow: 0 0px 3px 0 var(--color-mint-shadow);
+            bottom: 1px;
+          }
+        }
+      }
+
+      &.small {
+        &:hover {
+          box-shadow: 0 1px 0 0 rgba(193, 231, 221, 0.2);
+          background: rgba(195, 199, 201, 0.5);
+        }
       }
     }
 
-    &.small {
-      &:hover {
-        box-shadow: 0 1px 0 0 rgba(193, 231, 221, 0.2);
-        background: rgba(195, 199, 201, 0.5);
-      }
-    }
-  }
+    &.link {
+      color: var(--color-link-button);
+      background: transparent;
 
-  &.link {
-    color: var(--color-link-button);
-    background: transparent;
+      &.large,
+      &.small {
+        &:hover:not(:disabled) {
+          opacity: 0.64; // вместо отдельной переменной
+        }
 
-    &.large,
-    &.small {
-      &:hover:not(:disabled) {
-        opacity: 0.64; // вместо отдельной переменной
+        &:disabled {
+          color: var(--color-graphite-3);
+        }
       }
 
-      &:disabled {
-        color: var(--color-graphite-3);
-      }
-    }
-
-    &.large {
-      &:active:not(:disabled) {
-        opacity: 1;
-        color: #0f73ff;
+      &.large {
+        &:active:not(:disabled) {
+          opacity: 1;
+          color: #0f73ff;
+        }
       }
     }
   }

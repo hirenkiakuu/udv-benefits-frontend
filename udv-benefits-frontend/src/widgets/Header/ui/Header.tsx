@@ -9,8 +9,6 @@ interface HeaderProps {
   className?: string;
 }
 
-// сделать button navigation
-
 export const Header = ({ className }: HeaderProps) => {
   return (
     <header className={classNames(cls.header, {}, [className])}>
@@ -18,30 +16,42 @@ export const Header = ({ className }: HeaderProps) => {
       <nav>
         <ul className={cls.navButtons}>
           <li>
-            <NavLink to="/">
+            <NavLink
+              className={({ isActive }) => (isActive ? cls.active : "")}
+              to="/admin"
+            >
+              <Button className={cls.navButton} variant="text" size="large">
+                Администрирование
+              </Button>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              className={({ isActive }) => (isActive ? cls.active : "")}
+              to="/tutorial"
+            >
               <Button className={cls.navButton} variant="text" size="large">
                 Обучение
               </Button>
             </NavLink>
           </li>
           <li>
-            <NavLink to="/">
+            <NavLink
+              className={({ isActive }) => (isActive ? cls.active : "")}
+              to="/benefits"
+            >
               <Button className={cls.navButton} variant="text" size="large">
-                Обучение
+                Главная
               </Button>
             </NavLink>
           </li>
           <li>
-            <NavLink to="/">
+            <NavLink
+              className={({ isActive }) => (isActive ? cls.active : "")}
+              to="/requests"
+            >
               <Button className={cls.navButton} variant="text" size="large">
-                Обучение
-              </Button>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/">
-              <Button className={cls.navButton} variant="text" size="large">
-                Обучение
+                Заявки
               </Button>
             </NavLink>
           </li>

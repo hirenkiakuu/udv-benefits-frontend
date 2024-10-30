@@ -1,2 +1,8 @@
 @use "reset";
 @use "variables/global";
+
+.app {
+  background: var(--color-white);
+  min-height: 100vh;
+  width: 100vw;
+}

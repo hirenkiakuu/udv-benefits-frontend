@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Button from "./Button";
+import { Button } from "shared/ui/Button/Button";
 
 describe("Button component tests", () => {
   test.each<{
