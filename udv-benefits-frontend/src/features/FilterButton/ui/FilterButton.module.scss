@@ -1,0 +1,16 @@
+.filter-button {
+  border: none;
+  background: none;
+  color: var(--color-graphite-1);
+  padding: 10px 15px;
+  min-width: 213px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-radius: 12px;
+  cursor: pointer;
+
+  &.active {
+    background: rgba(102, 102, 102, 0.1);
+  }
+}
