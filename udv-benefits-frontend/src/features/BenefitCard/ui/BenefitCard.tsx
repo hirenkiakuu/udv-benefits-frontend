@@ -1,9 +1,9 @@
 import Heading from "shared/ui/Heading/Heading";
 import cls from "./BenefitCard.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import Button from "shared/ui/Button/Button";
 import benefitPlaceholder from "shared/assets/images/benefit-placeholder.png";
 import Divider from "shared/assets/icons/divider.svg";
+import { Button } from "shared/ui";
 
 interface BenefitCardProps {
   className?: string;
