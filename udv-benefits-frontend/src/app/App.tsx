@@ -1,12 +1,17 @@
 import { Outlet } from "react-router-dom";
 import "./styles/index.scss";
-import BenefitCard from "feauters/BenefitCard";
+import { Header } from "widgets/Header";
 
 const App = () => {
   return (
-    <div style={{ display: "flex", justifyContent: "center", padding: "20px" }}>
-      <BenefitCard />
-    </div>
+    <>
+      <div className="app">
+        <Header />
+        <div className={"content"}>
+          <Outlet />
+        </div>
+      </div>
+    </>
   );
 };
 
