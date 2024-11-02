@@ -6,17 +6,23 @@ import EmployeeRegistrationSection from "pages/EmployeeRegistrationSection";
 import RegistrationPage from "pages/RegistrationPage";
 import LoginPage from "pages/LoginPage";
 import RegistrationSuccessSection from "pages/RegistrationSuccessSection";
+import RequireAuth from "app/providers/RequireAuth/ui/RequireAuth";
 
 import { createBrowserRouter } from "react-router-dom";
 import LoginSuccessSection from "pages/LoginSuccessSection";
+import ConfirmAuthPage from "pages/ConfirmAuthPage";
 
 const AppRouter = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <RequireAuth>
+        <App />
+      </RequireAuth>
+    ),
     children: [
       {
-        path: "/benefits",
+        path: "benefits",
         element: <BenefitsPage />,
       },
     ],
@@ -52,6 +58,10 @@ const AppRouter = createBrowserRouter([
         element: <LoginSuccessSection />,
       },
     ],
+  },
+  {
+    path: "/auth-confirm",
+    element: <ConfirmAuthPage />,
   },
 ]);
 
