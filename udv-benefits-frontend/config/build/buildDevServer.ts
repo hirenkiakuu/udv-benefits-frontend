@@ -6,5 +6,11 @@ export function buildDevServer(options: BuildOptions): DevServerConfiguration {
     port: options.port,
     open: true,
     historyApiFallback: true,
+    proxy: [
+      {
+        context: ["/api"],
+        target: "http://localhost:8000",
+      },
+    ],
   };
 }
