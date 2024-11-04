@@ -26,7 +26,7 @@ const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
   useEffect(() => {
     const getMyBenefits = async () => {
       try {
-        const res = await api.get("/api/benefits/");
+        const res = await api.get("/api/benefits");
 
         if (res) {
           const { data } = res;
