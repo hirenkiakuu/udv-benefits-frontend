@@ -1,0 +1,35 @@
+.edit-user-modal {
+  border-radius: 12px;
+  padding: 48px;
+  width: 720px;
+  //   height: 942px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  background: var(--color-neutral-white);
+  z-index: 1000;
+
+  h1 {
+    margin-bottom: 32px;
+  }
+}
+
+.edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
