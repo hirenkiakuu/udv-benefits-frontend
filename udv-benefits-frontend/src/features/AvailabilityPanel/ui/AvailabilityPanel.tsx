@@ -27,19 +27,19 @@ const AvailabilityPanel = ({
         <Button
           variant="text"
           size="large"
-          isActive={currentBenefitsAvailability === "purchased"}
-          onClick={() => onAvailabilityChange("purchased")}
+          isActive={currentBenefitsAvailability === "active"}
+          onClick={() => onAvailabilityChange("active")}
         >
           Приобретенные льготы
         </Button>
-        <Button
+        {/* <Button
           variant="text"
           size="large"
           isActive={currentBenefitsAvailability === "unavailable"}
           onClick={() => onAvailabilityChange("unavailable")}
         >
           Недоступные льготы
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

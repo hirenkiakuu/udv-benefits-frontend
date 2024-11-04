@@ -5,13 +5,28 @@ import { Heading } from "shared/ui";
 import { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import CarouselButton from "features/CarouselButton";
+import { Benefit } from "entities/benefit.model";
 
 interface BenefitsCarouselProps {
   className?: string;
+  categoryTitle: string;
+  categoryId: number;
+  benefits: Benefit[];
+  benefitsAvailability: string;
 }
 
-const BenefitsByCategory = ({ className }: BenefitsCarouselProps) => {
+const BenefitsCarousel = ({
+  className,
+  benefits,
+  categoryTitle,
+  categoryId,
+  benefitsAvailability,
+}: BenefitsCarouselProps) => {
   const benefitsListRef = useRef<HTMLUListElement | null>(null);
+
+  // const isBought = benefitsAvailability === "active";
+
+  if (!benefits.length) return;
 
   const scrollLeft = () => {
     console.log("scrolled");
@@ -30,13 +45,14 @@ const BenefitsByCategory = ({ className }: BenefitsCarouselProps) => {
   return (
     <div className={classNames(cls.benefitsCarousel, {}, [className])}>
       <div className={cls.rowTitle}>
-        <Heading>Здоровье</Heading>
-        <NavLink to={"/"}>Посмотреть все предложения (8)</NavLink>
+        <Heading>{categoryTitle}</Heading>
+        <NavLink
+          to={`/benefits/category/${categoryId}?benefit_type=${benefitsAvailability}`}
+        >
+          Посмотреть все предложения ({benefits.length})
+        </NavLink>
       </div>
 
-      {/* <button onClick={scrollLeft} className={cls.scrollButton}>
-        ←
-      </button> */}
       <CarouselButton
         className={cls.carouselButtonLeft}
         onClick={scrollLeft}
@@ -48,19 +64,17 @@ const BenefitsByCategory = ({ className }: BenefitsCarouselProps) => {
         direction="right"
       />
 
-      {/* <button className={cls.scrollButton}>rigth</button> */}
-
       <ul className={cls.benefitsList} ref={benefitsListRef}>
-        <BenefitCard />
-        <BenefitCard />
-        <BenefitCard />
-        <BenefitCard />
-        <BenefitCard />
-        <BenefitCard />
-        <BenefitCard />
+        {benefits.map((benefit) => (
+          <BenefitCard
+            key={benefit.id}
+            benefitData={benefit}
+            benefitsAvailability={benefitsAvailability}
+          /> // сюда дата по бенефиту
+        ))}
       </ul>
     </div>
   );
 };
 
-export default BenefitsByCategory;
+export default BenefitsCarousel;

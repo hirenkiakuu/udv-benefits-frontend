@@ -4,26 +4,38 @@ import { classNames } from "shared/lib/classNames/classNames";
 import benefitPlaceholder from "shared/assets/images/benefit-placeholder.png";
 import Divider from "shared/assets/icons/divider.svg";
 import { Button } from "shared/ui";
+import { Benefit } from "entities/benefit.model";
+import { NavLink } from "react-router-dom";
 
 interface BenefitCardProps {
   className?: string;
+  benefitData: Benefit;
+  benefitsAvailability?: string;
 }
 
-const benefitMock = {
-  title: "Benefit title",
-  description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          varius enim in eros elementum tristique.`,
-  price: 100,
-};
+const BenefitCard = ({
+  className,
+  benefitData,
+  benefitsAvailability,
+}: BenefitCardProps) => {
+  const { title, description, price, id } = benefitData;
 
-const BenefitCard = ({ className }: BenefitCardProps) => {
-  const { title, description, price } = benefitMock;
+  let buttonText = "Приобрести";
+  let disabledState = false;
+
+  if (benefitsAvailability === "active") {
+    buttonText = "Приобретено";
+    disabledState = true;
+  } else if (benefitsAvailability === "unavailable") {
+    buttonText = "Недоступно";
+    disabledState = true;
+  }
 
   return (
     <div className={classNames(cls.benefitCard, {}, [className])}>
       <div className={cls.benefitTitle}>
         <img src={benefitPlaceholder} alt="изображение льготы" />
-        <Heading>{title}</Heading>
+        <Heading size="medium">{title}</Heading>
       </div>
       <div className={cls.benefitDescription}>
         <p>{description}</p>
@@ -31,9 +43,11 @@ const BenefitCard = ({ className }: BenefitCardProps) => {
       <Divider width="100%" height="0.38px" viewBox="0 0 270 0.38" />
       <div className={cls.benefitPrice}>
         <span>{price} U</span>
-        <Button variant="primary" size="large">
-          Приобрести
-        </Button>
+        <NavLink to={`/benefits/${id}`}>
+          <Button variant="primary" size="large" disabled={disabledState}>
+            {buttonText}
+          </Button>
+        </NavLink>
       </div>
     </div>
   );
