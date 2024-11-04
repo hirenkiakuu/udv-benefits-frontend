@@ -6,7 +6,7 @@ import Input from "shared/ui/Input/Input";
 import { useSelector } from "react-redux";
 import { RootState } from "app/providers/store/store";
 import { ChangeEvent, FormEvent, useState } from "react";
-import axios from "axios";
+import api from "shared/api/api";
 
 const formatDate = (date: string) => {
   const [day, month, year] = date.split(".");
@@ -22,12 +22,12 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
   const email = useSelector((s: RootState) => s.registration.email);
   const [formData, setFormData] = useState({
     email: email,
-    first_name: "",
-    middle_name: "",
-    last_name: "",
-    birth_date: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birthDate: "",
     phone: "",
-    has_children: false,
+    hasChildren: false,
   });
 
   const navigate = useNavigate();
@@ -40,15 +40,24 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
     });
   };
 
+  const handleSelectChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: checked,
+    });
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(formatDate(formData.birth_date));
+    // console.log(formatDate(formData.birth_date));
 
     try {
-      const res = await axios.post("/api/users", {
+      const res = await api.post("/api/users", {
         ...formData,
-        birth_date: formatDate(formData.birth_date),
+        birthDate: formatDate(formData.birthDate),
       });
 
       if (res) {
@@ -71,7 +80,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         <div className={cls.formInput}>
           <label htmlFor="">Фамилия</label>
           <Input
-            name="last_name"
+            name="lastName"
             placeholder="Фамилия"
             onChange={handleInputChange}
           />
@@ -80,7 +89,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         <div className={cls.formInput}>
           <label htmlFor="">Имя</label>
           <Input
-            name="first_name"
+            name="firstName"
             placeholder="Имя"
             onChange={handleInputChange}
           />
@@ -91,7 +100,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         <div className={cls.formInput}>
           <label htmlFor="">Отчество</label>
           <Input
-            name="middle_name"
+            name="middleName"
             placeholder="Отчество"
             onChange={handleInputChange}
           />
@@ -100,7 +109,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         <div className={cls.formInput}>
           <label htmlFor="">Дата рождения</label>
           <Input
-            name="birth_date"
+            name="birthDate"
             placeholder="00.00.0000"
             onChange={handleInputChange}
           />
@@ -117,7 +126,12 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
       </div>
 
       <label>
-        <input type="checkbox" /> Есть дети
+        <input
+          name="hasChildren"
+          type="checkbox"
+          onChange={handleSelectChange}
+        />
+        Есть дети
       </label>
 
       <div className={cls.formButtons}>
