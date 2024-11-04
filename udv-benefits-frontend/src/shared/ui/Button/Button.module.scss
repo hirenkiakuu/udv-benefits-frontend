@@ -16,7 +16,7 @@
   }
 
   &.small {
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 7px 11px;
     font-size: var(--text-size-body-s);
     max-height: 30px;
@@ -56,12 +56,14 @@
     background: var(--color-neutral-white);
     color: var(--color-graphite-1);
 
+    border: 1px solid transparent;
+
     &.large {
       box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
 
       &:hover {
         box-shadow: 0 2px 0 0 rgba(195, 199, 201, 0.1);
-        border: 1px solid var(--color-mint-3);
+        border-color: var(--color-mint-3);
         color: var(--color-mint-3);
       }
 
@@ -80,11 +82,13 @@
     }
 
     &.small {
-      box-shadow: 0 1px 0 0 rgba(195, 199, 201, 0.1);
-      border: 0.75px solid var(--color-graphite-4);
+      // box-shadow: 0 1px 0 0 rgba(195, 199, 201, 0.1);
+      // border: 0.75px solid var(--color-graphite-4);
+
+      box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
 
       &:hover {
-        border: 1px solid var(--color-mint-3);
+        border-color: var(--color-mint-3);
         color: var(--color-mint-3);
       }
     }
