@@ -1,0 +1,43 @@
+.orders-page {
+  font-family: var(--font-family-body-golos);
+  color: var(--color-graphite-1);
+}
+
+.orders-page-container-inner {
+  padding: 20px;
+}
+
+.orders-page-heading {
+  margin-bottom: 24px;
+
+  h1 {
+    margin-bottom: 4px;
+  }
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+th {
+  padding-top: 18px;
+  padding-bottom: 18px;
+  padding-left: 24px;
+  border-bottom: 3px solid var(--color-graphite-1);
+  text-align: left;
+}
+
+td {
+  padding-top: 28px;
+  padding-bottom: 28px;
+  padding-left: 24px;
+  border-bottom: 1px solid var(--color-graphite-1);
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+td:first-child {
+  max-width: 250px;
+}

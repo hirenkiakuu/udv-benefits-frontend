@@ -1,0 +1,52 @@
+.order-page {
+  font-family: var(--font-family-body-golos);
+  color: var(--color-graphite-1);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.order-page-container-inner {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  position: relative;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 716px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-transaction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.backButton {
+  position: absolute;
+
+  left: -50px;
+  top: 25px;
+}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "";
+export const BASE_URL = "http://localhost:3000";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -32,20 +32,21 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
+        const currentRefreshToken = localStorage.getItem("refreshToken");
 
-        const {
-          access_token: newAccessToken,
-          refresh_token: newRefreshToken,
-        }: { access_token: string; refresh_token: string } = await api.post(
-          `/api/auth/token/refresh?refresh_token=${refreshToken}`
+        const res = await api.post(
+          `/api/auth/token/refresh?refresh_token=${currentRefreshToken}`
         );
 
-        localStorage.setItem("accessToken", newAccessToken);
-        localStorage.setItem("refreshToken", newRefreshToken);
+        const {
+          accessToken,
+          refreshToken,
+        }: { accessToken: string; refreshToken: string } = res.data;
 
-        api.defaults.headers.common["Authorization"] =
-          `Bearer ${newAccessToken}`;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (err) {
         console.error("Token refresh failed", err);
