@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface UserProfile {
+  id: number;
   email: string | null;
   firstName: string | null;
   lastName: string | null;
@@ -11,7 +12,7 @@ interface UserProfile {
   hasChildren: boolean | null;
   position: string | null;
   isAdmin: boolean | null;
-  coins: number | null;
+  balance: number | null;
 }
 
 interface UserState {
@@ -26,6 +27,7 @@ const initialState: UserState = {
   refreshToken: localStorage.getItem("refreshToken") ?? null,
   tempToken: localStorage.getItem("token") ?? null,
   userProfile: {
+    id: null,
     email: null,
     firstName: null,
     lastName: null,
@@ -35,7 +37,7 @@ const initialState: UserState = {
     hasChildren: null,
     position: null,
     isAdmin: null,
-    coins: null,
+    balance: null,
   },
 };
 
@@ -65,7 +67,17 @@ const userSlice = createSlice({
       state.userProfile.hasChildren = action.payload.hasChildren;
       state.userProfile.position = action.payload.position;
       state.userProfile.isAdmin = action.payload.isAdmin;
-      state.userProfile.coins = action.payload.coins;
+      state.userProfile.balance = action.payload.balance;
+      state.userProfile.id = action.payload.id;
+    },
+    clearTokens(state) {
+      state.accessToken = null;
+      state.refreshToken = null;
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    },
+    decreaseBalance(state, action: PayloadAction<number>) {
+      state.userProfile.balance -= action.payload;
     },
   },
 });

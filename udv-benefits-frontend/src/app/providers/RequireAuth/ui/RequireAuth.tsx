@@ -14,23 +14,26 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(accessToken);
     const authorizeMe = async () => {
       try {
         const {
+          id,
           email,
-          first_name: firstName,
-          middle_name: middleName,
-          last_name: lastName,
-          birth_date: birthDate,
+          firstName,
+          middleName,
+          lastName,
+          birthDate,
           phone,
           position,
-          has_children: hasChildren,
-          is_admin: isAdmin,
-          coins,
+          hasChildren,
+          isAdmin,
+          balance,
         } = await getUserData();
 
         dispatch(
           userActions.setProfile({
+            id,
             email,
             firstName,
             middleName,
@@ -40,7 +43,7 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
             position,
             hasChildren,
             isAdmin,
-            coins,
+            balance,
           })
         );
       } catch (err) {
@@ -48,7 +51,7 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
       }
     };
 
-    if (accessToken) {
+    if (accessToken !== undefined) {
       authorizeMe();
     }
   }, []);

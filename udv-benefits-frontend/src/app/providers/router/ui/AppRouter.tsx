@@ -11,6 +11,14 @@ import RequireAuth from "app/providers/RequireAuth/ui/RequireAuth";
 import { createBrowserRouter } from "react-router-dom";
 import LoginSuccessSection from "pages/LoginSuccessSection";
 import ConfirmAuthPage from "pages/ConfirmAuthPage";
+import BenefitsByCategoryPage from "pages/BenefitsByCategoryPage";
+import BenefitPage from "pages/BenefitPage";
+import OrdersPage from "pages/OrdersPage";
+import OrderPage from "pages/OrderPage";
+import DashboardPage from "pages/DashboardPage";
+import MyBenefitsPage from "pages/MyBenefitsPage";
+import OrdersFromUsersPage from "pages/OrdersFromUsersPage";
+import EmployeesPage from "pages/EmployeesPage";
 
 const AppRouter = createBrowserRouter([
   {
@@ -24,6 +32,40 @@ const AppRouter = createBrowserRouter([
       {
         path: "benefits",
         element: <BenefitsPage />,
+      },
+      {
+        path: "benefits/category/:id",
+        element: <BenefitsByCategoryPage />,
+      },
+      {
+        path: "benefits/:id",
+        element: <BenefitPage />,
+      },
+      {
+        path: "orders/",
+        element: <OrdersPage />,
+      },
+      {
+        path: "orders/:id",
+        element: <OrderPage />,
+      },
+      {
+        path: "hr-dashboard",
+        element: <DashboardPage />,
+        children: [
+          {
+            path: "my-benefits",
+            element: <MyBenefitsPage />,
+          },
+          {
+            path: "orders",
+            element: <OrdersFromUsersPage />,
+          },
+          {
+            path: "employees",
+            element: <EmployeesPage />,
+          },
+        ],
       },
     ],
   },
