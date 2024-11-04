@@ -1,0 +1,13 @@
+.status {
+  &.accepted {
+    background: rgba(127, 191, 132, 0.6);
+  }
+
+  &.rejected {
+    background: rgba(221, 44, 44, 0.5);
+  }
+
+  &.pending {
+    background: rgba(60, 117, 130, 0.5);
+  }
+}

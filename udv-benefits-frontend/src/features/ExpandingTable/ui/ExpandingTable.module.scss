@@ -1,0 +1,22 @@
+.action-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.full-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.approved {
+  background: rgba(127, 191, 132, 0.6);
+}
+
+.rejected {
+  background: rgba(221, 44, 44, 0.5); // Color for rejected status
+}
+
+.pending {
+  background: rgba(60, 117, 130, 0.6); // Color for pending status
+}
