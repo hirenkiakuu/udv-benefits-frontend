@@ -22,7 +22,7 @@ const ConfirmAuthPage = ({ className }: ConfirmAuthPageProps) => {
 
     const login = async () => {
       try {
-        const { access_token: accessToken, refresh_token: refreshToken } =
+        const { accessToken, refreshToken } =
           await loginWithTempToken(tempToken);
 
         dispatch(userActions.setTokens({ accessToken, refreshToken }));
