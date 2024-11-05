@@ -4,16 +4,16 @@ import { Button } from "shared/ui";
 import Logo from "shared/assets/images/Logo.png";
 import ProfileDropdown from "widgets/ProfileDropdown/ui/ProfileDropdown";
 import { NavLink, useLocation } from "react-router-dom";
-// import { RootState } from "app/providers/store/store";
-// import { useSelector } from "react-redux";
+import { RootState } from "app/providers/store/store";
+import { useSelector } from "react-redux";
 
 interface HeaderProps {
   className?: string;
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  // const { isAdmin } = useSelector((s: RootState) => s.user.userProfile);
-  const isAdmin = true; // временно
+  const { isAdmin } = useSelector((s: RootState) => s.user.userProfile);
+  // const isAdmin = true; // временно
 
   const location = useLocation();
   const isAdminActive = location.pathname.startsWith("/hr-dashboard");
