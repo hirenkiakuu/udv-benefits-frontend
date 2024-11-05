@@ -43,7 +43,7 @@ const formatPeriod = (period: string) => {
 };
 
 const formatStatus = (status: string) => {
-  if (status === "accepted") return "Одобрено";
+  if (status === "approved") return "Одобрено";
   else if (status === "rejected") return "Отклонено";
   else return "В рассмотрении";
 };
@@ -85,7 +85,10 @@ const OrderPage = ({ className }: OrderPageProps) => {
           </div>
           <div className={cls.orderInfo}>
             <p>{order?.benefit.description}</p>
-            <p>Срок действия: {formatPeriod(order?.benefit.period)}</p>
+            <p>
+              <b>Срок действия: </b>
+              {formatPeriod(order?.benefit.period)}
+            </p>
           </div>
 
           <Heading size="medium">Инструкция по активации:</Heading>
@@ -94,16 +97,27 @@ const OrderPage = ({ className }: OrderPageProps) => {
 
         <div className={cls.right}>
           <Heading>{order?.benefit.price} U</Heading>
-          <Heading>{formatStatus(order?.status)}</Heading>
+          <Heading
+            className={classNames(
+              cls.status,
+              {
+                [cls.danger]: order?.status === "rejected",
+                [cls.approved]: order?.status === "approved",
+              },
+              []
+            )}
+          >
+            {formatStatus(order?.status)}
+          </Heading>
 
           <div className={cls.orderTransactionInfo}>
-            <Heading size="medium">Данные об операции</Heading>
+            <Heading size="medium">Данные об операции:</Heading>
             <p>
               Дата поступления заявки:{" "}
               {new Date(order?.createdAt).toLocaleString()}
             </p>
           </div>
-          {order?.benefit.isCancellable && (
+          {order?.benefit.isCancellable && order?.status === "approved" && (
             <Button variant="primary" size="large">
               Отменить бенефит
             </Button>

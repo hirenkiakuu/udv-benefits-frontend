@@ -3,7 +3,7 @@ import { classNames } from "shared/lib/classNames/classNames";
 import { Button } from "shared/ui";
 import Logo from "shared/assets/images/Logo.png";
 import ProfileDropdown from "widgets/ProfileDropdown/ui/ProfileDropdown";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 // import { RootState } from "app/providers/store/store";
 // import { useSelector } from "react-redux";
 
@@ -15,6 +15,9 @@ export const Header = ({ className }: HeaderProps) => {
   // const { isAdmin } = useSelector((s: RootState) => s.user.userProfile);
   const isAdmin = true; // временно
 
+  const location = useLocation();
+  const isAdminActive = location.pathname.startsWith("/hr-dashboard");
+
   return (
     <header className={classNames(cls.header, {}, [className])}>
       <img src={Logo} alt="Логотип" />
@@ -23,8 +26,9 @@ export const Header = ({ className }: HeaderProps) => {
           {isAdmin && (
             <li>
               <NavLink
-                className={({ isActive }) => (isActive ? cls.active : "")}
+                className={isAdminActive ? cls.active : ""}
                 to="/hr-dashboard/my-benefits"
+                end={false}
               >
                 <Button className={cls.navButton} variant="text" size="large">
                   Администрирование

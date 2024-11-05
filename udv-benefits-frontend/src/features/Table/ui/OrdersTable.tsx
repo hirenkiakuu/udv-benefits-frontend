@@ -23,6 +23,7 @@ interface Order {
   endsAt: string;
   benefit: BenefitExt;
 }
+type OrderStatus = "in_work" | "rejected" | "approved";
 
 interface TableProps {
   className?: string;
@@ -31,6 +32,12 @@ interface TableProps {
 
 const OrdersTable = ({ className, tableData }: TableProps) => {
   // const status = order.status === "in_work" ? "в работе" : order;
+
+  const statuses: Record<OrderStatus, string> = {
+    in_work: "В работе",
+    rejected: "Отклонена",
+    approved: "Одобрена",
+  };
 
   return (
     <table className={classNames(cls.ordersTable, {}, [className])}>
@@ -61,7 +68,7 @@ const OrdersTable = ({ className, tableData }: TableProps) => {
                 []
               )}
             >
-              {order.status}
+              {statuses[order.status as OrderStatus]}
             </td>
             <td>
               {order.activatedAt

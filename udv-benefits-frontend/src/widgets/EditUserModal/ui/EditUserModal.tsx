@@ -13,8 +13,18 @@ interface EditUserModalProps {
 }
 
 function formatDate(dateString: string): string {
+  if (!dateString) return;
+
   const [day, month, year] = dateString.split(".");
   return `${year}-${month}-${day}`;
+}
+
+function formatDateToDot(dateString: string): string {
+  if (!dateString) return "00.00.0000";
+  if (dateString === "00.00.0000") return dateString;
+  console.log(dateString);
+  const [year, month, day] = dateString.split("-");
+  return `${day}.${month}.${year}`;
 }
 
 const EditUserModal = ({
@@ -32,7 +42,7 @@ const EditUserModal = ({
     department: currentUser.department || "",
     hasChildren: currentUser.hasChildren || false,
     isAdmin: currentUser.isAdmin || false,
-    workStartDate: "",
+    workStartDate: currentUser.workStartDate || "",
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +140,7 @@ const EditUserModal = ({
           <label htmlFor="department">Отдел</label>
           <Input
             name="department"
-            placeholder={currentUser.department}
+            placeholder={currentUser.department || "Например, отдел разработки"}
             onChange={handleInputChange}
           />
         </div>
@@ -139,7 +149,7 @@ const EditUserModal = ({
           <label htmlFor="department">Дата начала работы</label>
           <Input
             name="workStartDate"
-            placeholder={currentUser.department}
+            placeholder={formatDateToDot(formData.workStartDate)}
             onChange={handleInputChange}
           />
         </div>

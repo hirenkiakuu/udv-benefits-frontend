@@ -8,7 +8,7 @@
 
 .order-page-container-inner {
   display: flex;
-  align-items: center;
+  //   align-items: center;
   gap: 48px;
   position: relative;
 }
@@ -24,6 +24,7 @@
   flex-direction: column;
   gap: 32px;
   min-width: 716px;
+  max-width: 900px;
 }
 
 .right {
@@ -49,4 +50,12 @@
 
   left: -50px;
   top: 25px;
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+.approved {
+  color: var(--color-mint-1);
 }

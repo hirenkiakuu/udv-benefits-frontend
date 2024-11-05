@@ -79,6 +79,8 @@ function formatWorkExperience(workExperience: {
   return result;
 }
 
+type OrderStatus = "in_work" | "rejected" | "approved";
+
 export const TableRow = ({
   data,
   onAccept,
@@ -89,6 +91,12 @@ export const TableRow = ({
   onEdit,
 }: TableRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const statuses: Record<OrderStatus, string> = {
+    in_work: "В работе",
+    rejected: "Отклонена",
+    approved: "Одобрена",
+  };
 
   const statusClass =
     data.status === "approved"
@@ -103,7 +111,10 @@ export const TableRow = ({
     return (
       <>
         <tr>
-          <td onClick={() => setIsExpanded((prevState) => !prevState)}>
+          <td
+            className={cls.clickableCell}
+            onClick={() => setIsExpanded((prevState) => !prevState)}
+          >
             {data.lastName + " " + data.firstName + " " + data.middleName}
           </td>
           <td></td>
@@ -157,14 +168,17 @@ export const TableRow = ({
   return (
     <>
       <tr>
-        <td onClick={() => setIsExpanded((prevState) => !prevState)}>
+        <td
+          className={cls.clickableCell}
+          onClick={() => setIsExpanded((prevState) => !prevState)}
+        >
           {Object.values(data)[1]}
         </td>
         {Object.values(data)
           .slice(2, 6)
           .map((value, index) => (
             <td key={index} className={index === 2 ? statusClass : ""}>
-              {value}
+              {index === 2 ? statuses[value as OrderStatus] : value}
             </td>
           ))}
         <td>

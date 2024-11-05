@@ -20,7 +20,7 @@ const CreateBenefitModal = ({
     price: 0,
     period: "one_year",
     instructions: "",
-    categoryId: 0,
+    categoryId: 1,
     isCancellable: false,
   });
 
@@ -60,7 +60,7 @@ const CreateBenefitModal = ({
 
       if (res) {
         const { data } = res;
-
+        onClose();
         console.log(data);
       }
     } catch (err) {
@@ -134,12 +134,14 @@ const CreateBenefitModal = ({
         </div>
 
         <div className={cls.formInputRow}>
-          <label htmlFor="">Отменяемая льгота</label>
-          <input
-            name="isCancellable"
-            type="checkbox"
-            onChange={handleCheckboxChange}
-          />
+          <div className={cls.inputCheckbox}>
+            <label htmlFor="">Отменяемая льгота</label>
+            <input
+              name="isCancellable"
+              type="checkbox"
+              onChange={handleCheckboxChange}
+            />
+          </div>
         </div>
 
         <div className={cls.formButtons}>
