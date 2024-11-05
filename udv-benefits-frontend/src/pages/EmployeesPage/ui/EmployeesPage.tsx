@@ -38,6 +38,23 @@ interface User {
   };
 }
 
+interface User {
+  email: string;
+  phone: string;
+  birthDate: string;
+  hasChildren: boolean;
+  position?: string;
+  department?: string;
+  isAdmin: boolean;
+  workStartDate: string;
+  workEndDate: string;
+  balance: string;
+  workExperience: {
+    months: string; // Change this to string if necessary
+    years: string; // Change this to string if necessary
+  };
+}
+
 interface UserData {
   id: number;
   firstName: string;
@@ -74,6 +91,12 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
+  };
+
+  const handleUserUpdate = (updatedUser: UserData) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+    );
   };
 
   useEffect(() => {
@@ -150,6 +173,7 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
         <EditUserModal
           onClose={handleCloseModal}
           currentUser={users?.find((user) => user.id === currentEditId)}
+          onUserUpdate={handleUserUpdate}
         />
       )}
     </div>

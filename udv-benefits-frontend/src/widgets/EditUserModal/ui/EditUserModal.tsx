@@ -6,14 +6,39 @@ import { User } from "entities/user.model";
 import { ChangeEvent, useState } from "react";
 import api from "shared/api/api";
 
+// interface UserData {
+//   id: number;
+//   firstName: string;
+//   lastName: string;
+//   middleName: string;
+//   user: User; // Добавляем поле user
+//   isVerified: boolean;
+//   status: "approved" | "rejected" | "in_work"; // Adjust as per your needs
+//   workExperience: {
+//     months: string;
+//     years: string;
+//   };
+//   email: string;
+//   phone: string;
+//   birthDate: string;
+//   hasChildren: boolean;
+//   position: string;
+//   department: string;
+//   isAdmin: boolean;
+//   workStartDate: string;
+//   workEndDate: string;
+//   balance: number;
+// }
+
 interface EditUserModalProps {
   className?: string;
   onClose: () => void;
   currentUser: User;
+  onUserUpdate: (updatedUser: User) => void;
 }
 
 function formatDate(dateString: string): string {
-  if (!dateString) return;
+  if (!dateString) return null;
 
   const [day, month, year] = dateString.split(".");
   return `${year}-${month}-${day}`;
@@ -31,6 +56,7 @@ const EditUserModal = ({
   className,
   onClose,
   currentUser,
+  onUserUpdate,
 }: EditUserModalProps) => {
   const [formData, setFormData] = useState({
     lastName: currentUser.lastName || "",
@@ -42,7 +68,7 @@ const EditUserModal = ({
     department: currentUser.department || "",
     hasChildren: currentUser.hasChildren || false,
     isAdmin: currentUser.isAdmin || false,
-    workStartDate: currentUser.workStartDate || "",
+    workStartDate: currentUser.workStartDate,
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +97,7 @@ const EditUserModal = ({
       if (res) {
         console.log(res);
         onClose();
+        onUserUpdate(res.data);
       }
     } catch (err) {
       console.error(err);

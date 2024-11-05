@@ -36,7 +36,7 @@ const EmailForm = ({ className, submitAction, buttonText }: EmailFormProps) => {
         const res = await axios.post(`/api/auth/send-email?email=${email}`);
 
         if (res) {
-          alert("Login совершен");
+          // alert("Login совершен");
           navigate("/login/success");
         }
       } catch (err) {

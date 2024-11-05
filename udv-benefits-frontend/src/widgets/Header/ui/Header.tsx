@@ -62,7 +62,7 @@ export const Header = ({ className }: HeaderProps) => {
               to="/orders"
             >
               <Button className={cls.navButton} variant="text" size="large">
-                Заявки
+                Мои заявки
               </Button>
             </NavLink>
           </li>

@@ -62,7 +62,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
 
       if (res) {
         console.log(res);
-        alert("success");
+        // alert("success");
 
         navigate("/register/success");
       }
