@@ -5,14 +5,14 @@ import { Button } from "shared/ui";
 import Input from "shared/ui/Input/Input";
 import { useSelector } from "react-redux";
 import { RootState } from "app/providers/store/store";
-import { ChangeEvent, FormEvent, useState } from "react";
+// import { ChangeEvent, FormEvent, useState } from "react";
 import api from "shared/api/api";
-
-const formatDate = (date: string) => {
-  const [day, month, year] = date.split(".");
-
-  return `${year}-${month}-${day}`;
-};
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  employeeDetailsSchema,
+  EmployeeFormData,
+} from "../model/employee-details-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EmployeeDetailsFormProps {
   className?: string;
@@ -20,49 +20,34 @@ interface EmployeeDetailsFormProps {
 
 const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
   const email = useSelector((s: RootState) => s.registration.email);
-  const [formData, setFormData] = useState({
-    email: email,
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    birthDate: "",
-    phone: "",
-    hasChildren: false,
+
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    formState: { errors },
+  } = useForm<EmployeeFormData>({
+    resolver: zodResolver(employeeDetailsSchema),
+    defaultValues: {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    },
   });
 
   const navigate = useNavigate();
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSelectChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: checked,
-    });
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // console.log(formatDate(formData.birth_date));
+  const onSubmit: SubmitHandler<EmployeeFormData> = async (data) => {
+    console.log(data);
 
     try {
       const res = await api.post("/api/users", {
-        ...formData,
-        birthDate: formatDate(formData.birthDate),
+        email,
+        ...data,
       });
 
       if (res) {
         console.log(res);
-        // alert("success");
 
         navigate("/register/success");
       }
@@ -74,7 +59,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
   return (
     <form
       className={classNames(cls.employeeDetailsForm, {}, [className])}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className={cls.formInputRow}>
         <div className={cls.formInput}>
@@ -82,8 +67,12 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
           <Input
             name="lastName"
             placeholder="Фамилия"
-            onChange={handleInputChange}
+            {...register("lastName")}
+            danger={!!errors.lastName}
           />
+          {errors.lastName && (
+            <p className="error-message">{errors.lastName.message}</p>
+          )}
         </div>
 
         <div className={cls.formInput}>
@@ -91,8 +80,12 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
           <Input
             name="firstName"
             placeholder="Имя"
-            onChange={handleInputChange}
+            {...register("firstName")}
+            danger={!!errors.firstName}
           />
+          {errors.firstName && (
+            <p className="error-message">{errors.firstName.message}</p>
+          )}
         </div>
       </div>
 
@@ -102,7 +95,7 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
           <Input
             name="middleName"
             placeholder="Отчество"
-            onChange={handleInputChange}
+            {...register("middleName")}
           />
         </div>
 
@@ -111,7 +104,51 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
           <Input
             name="birthDate"
             placeholder="00.00.0000"
-            onChange={handleInputChange}
+            {...register("birthDate")}
+            danger={!!errors.birthDate}
+          />
+          {errors.birthDate && (
+            <p className="error-message">{errors.birthDate.message}</p>
+          )}
+        </div>
+      </div>
+
+      <div className={cls.formInputRow}>
+        <div className={cls.formInput}>
+          <label htmlFor="">Дата начала работы в компании</label>
+          <Input
+            name="workStartDate"
+            placeholder="00.00.0000"
+            {...register("workStartDate")}
+          />
+        </div>
+
+        <div className={cls.formInput}>
+          <label htmlFor="">Юридическое лицо</label>
+          <Input
+            name="ЮрЛицо"
+            placeholder="ООО Сайберлимфа"
+            {...register("legalEntity")}
+          />
+        </div>
+      </div>
+
+      <div className={cls.formInputRow}>
+        <div className={cls.formInput}>
+          <label htmlFor="">Подразделение</label>
+          <Input
+            name="department"
+            placeholder="Web"
+            {...register("department")}
+          />
+        </div>
+
+        <div className={cls.formInput}>
+          <label htmlFor="">Должность</label>
+          <Input
+            name="position"
+            placeholder="Дизайнер"
+            {...register("position")}
           />
         </div>
       </div>
@@ -121,15 +158,19 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         <Input
           name="phone"
           placeholder="+7 (000) 000-00-00"
-          onChange={handleInputChange}
+          {...register("phone")}
+          danger={!!errors.phone}
         />
+        {errors.phone && (
+          <p className="error-message">{errors.phone.message}</p>
+        )}
       </div>
 
       <label>
         <input
           name="hasChildren"
           type="checkbox"
-          onChange={handleSelectChange}
+          {...register("hasChildren")}
         />
         Есть дети
       </label>

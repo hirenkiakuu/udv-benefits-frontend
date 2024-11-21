@@ -3,11 +3,15 @@ import cls from "./EmailForm.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import Input from "shared/ui/Input/Input";
 import { useNavigate } from "react-router-dom";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "app/providers/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/providers/store/store";
 import { registrationActions } from "app/providers/store/registration.slice";
 import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { emailSchema } from "../model/email-schema";
+import { EmailFormData } from "../model/email-schema";
+import { useEffect } from "react";
 
 interface EmailFormProps {
   className?: string;
@@ -16,27 +20,38 @@ interface EmailFormProps {
 }
 
 const EmailForm = ({ className, submitAction, buttonText }: EmailFormProps) => {
-  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const email = useSelector((s: RootState) => s.registration.email);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setEmail(value);
-  };
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    setValue,
+    formState: { errors },
+  } = useForm<EmailFormData>({
+    resolver: zodResolver(emailSchema),
+    defaultValues: {
+      email,
+    },
+  });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    setValue("email", email);
+  }, [email, setValue]);
 
+  const onSubmit: SubmitHandler<EmailFormData> = async (data) => {
     if (submitAction === "store") {
-      dispatch(registrationActions.setEmail(email));
+      dispatch(registrationActions.setEmail(data.email));
       navigate("/register/details");
     } else if (submitAction === "request") {
       try {
-        const res = await axios.post(`/api/auth/send-email?email=${email}`);
+        const res = await axios.post(
+          `/api/auth/send-email?email=${data.email}`
+        );
 
         if (res) {
-          // alert("Login совершен");
           navigate("/login/success");
         }
       } catch (err) {
@@ -48,15 +63,21 @@ const EmailForm = ({ className, submitAction, buttonText }: EmailFormProps) => {
   return (
     <form
       className={classNames(cls.emailForm, {}, [className])}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className={cls.formInput}>
         <label htmlFor="">Электронная почта</label>
         <Input
           name="email"
           placeholder="hello@udv.io"
-          onChange={handleInputChange}
+          {...register("email", {
+            onChange: () => clearErrors("email"),
+          })}
+          danger={!!errors.email}
         />
+        {errors.email && (
+          <p className={cls.errorMessage}>{errors.email.message}</p>
+        )}
       </div>
       <Button
         className={cls.formButton}

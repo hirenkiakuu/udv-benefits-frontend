@@ -1,6 +1,6 @@
 import cls from "./RegistrationPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import Logo from "shared/assets/images/Logo.png";
+import LogoWithCompanyName from "shared/assets/images/LogoWithCompanyName.png";
 import { Outlet } from "react-router-dom";
 
 interface RegistrationPageProps {
@@ -10,7 +10,7 @@ interface RegistrationPageProps {
 const RegistrationPage = ({ className }: RegistrationPageProps) => {
   return (
     <div className={classNames(cls.registrationPage, {}, [className])}>
-      <img src={Logo} alt="Логотип" className={cls.logo} />
+      <img src={LogoWithCompanyName} alt="Логотип" className={cls.logo} />
       <section className={cls.sectionContainer}>
         <Outlet />
       </section>
