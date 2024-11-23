@@ -1,3 +1,8 @@
+export interface Category {
+  title: string;
+  id: number;
+}
+
 export interface Benefit {
   title: string;
   description: string;
@@ -8,6 +13,7 @@ export interface Benefit {
   isCancellable: boolean;
   id: number;
   createdAt: string;
+  category: Category;
 }
 
 export interface BenefitsGroup {
