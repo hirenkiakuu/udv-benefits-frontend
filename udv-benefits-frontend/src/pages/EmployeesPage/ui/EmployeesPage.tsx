@@ -1,86 +1,19 @@
-import { Heading } from "shared/ui";
+import { Badge, Button, Heading, Table } from "shared/ui";
 import cls from "./EmployeesPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import api from "shared/api/api";
-import { useEffect, useState } from "react";
-// import ExpandingTable from "features/ExpandingTable";
-import { TableRow } from "features/ExpandingTable/ui/ExpandingTable";
-
+import { useEffect, useMemo, useState } from "react";
 import EditUserModal from "widgets/EditUserModal";
+import { ColumnsConfig } from "shared/ui/Table/model/table.config";
+import { User } from "entities/user.model";
+import { ExpandableRowCell } from "shared/ui/Table/ui/Table";
 
 interface EmployeesPageProps {
   className?: string;
 }
 
-// interface UserData {
-//   id: number;
-//   firstName: string;
-//   middleName: string;
-//   lastName: string;
-// }
-
-// const prepareTableData = (user) => {};
-
-interface User {
-  email: string;
-  phone: string;
-  birthDate: string;
-  hasChildren: boolean;
-  position?: string;
-  department?: string;
-  isAdmin: boolean;
-  workStartDate: string;
-  workEndDate: string;
-  balance: string;
-  workExperience: {
-    months: string; // Change this to string if necessary
-    years: string; // Change this to string if necessary
-  };
-}
-
-interface User {
-  email: string;
-  phone: string;
-  birthDate: string;
-  hasChildren: boolean;
-  position?: string;
-  department?: string;
-  isAdmin: boolean;
-  workStartDate: string;
-  workEndDate: string;
-  balance: string;
-  workExperience: {
-    months: string; // Change this to string if necessary
-    years: string; // Change this to string if necessary
-  };
-}
-
-interface UserData {
-  id: number;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  user: User; // Добавляем поле user
-  isVerified: boolean;
-  status: "approved" | "rejected" | "in_work"; // Adjust as per your needs
-  workExperience: {
-    months: string;
-    years: string;
-  };
-  email: string;
-  phone: string;
-  birthDate: string;
-  hasChildren: boolean;
-  position: string;
-  department: string;
-  isAdmin: boolean;
-  workStartDate: string;
-  workEndDate: string;
-  balance: number;
-}
-
 const EmployeesPage = ({ className }: EmployeesPageProps) => {
-  const [users, setUsers] = useState<UserData[]>();
+  const [users, setUsers] = useState<User[]>();
   const [currentEditId, setCurrentEditId] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -119,6 +52,9 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
 
   const handleAcceptClick = async (id: number) => {
     const user = users?.find((user) => user.id === id);
+
+    console.log(user.id);
+
     try {
       const res = await api.patch(`/api/users/${id}/verify`, user);
 
@@ -136,6 +72,124 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
     }
   };
 
+  const columnsConfig: ColumnsConfig<User> = [
+    {
+      header: "ФИО",
+      render: (user) => `${user.firstName} ${user.middleName} ${user.lastName}`,
+    },
+    {
+      header: "Дата подачи заявки",
+      render: (user) => user.lastName,
+    },
+    {
+      header: "Статус сотрудника",
+      render: (user) => <Badge status={user.isVerified} />,
+    },
+    {
+      header: "",
+      render: (user) =>
+        !user.isVerified && (
+          <Button
+            onClick={() => handleAcceptClick(user.id)}
+            variant="primary"
+            size="large"
+          >
+            Принять сотрудника
+          </Button>
+        ),
+    },
+  ];
+
+  const expandableRowConfig: ExpandableRowCell<User>[] = useMemo(
+    () => [
+      {
+        render: (user) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "40px" }}
+          >
+            <div>
+              <p>
+                <b>Юридическое лицо</b>
+              </p>
+              <p>{user.firstName}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Подразделение</b>
+              </p>
+              <p>{user.department}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Должность</b>
+              </p>
+              <p>{user.position}</p>
+            </div>
+          </div>
+        ),
+      },
+      {
+        render: (user) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "40px" }}
+          >
+            <div>
+              <p>
+                <b>Электронная почта</b>
+              </p>
+              <p>{user.email}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Дата рождения</b>
+              </p>
+              <p>{user.birthDate}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Возраст</b>
+              </p>
+              <p>{user.birthDate}</p>
+            </div>
+          </div>
+        ),
+      },
+      {
+        render: (user) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "40px" }}
+          >
+            <div>
+              <p>
+                <b>Телефон</b>
+              </p>
+              <p>{user.phone}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Время работы в UDV</b>
+              </p>
+              <p>{user.workExperience.months}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Есть дети</b>
+              </p>
+              <p>{user.hasChildren ? "Да" : "Нет"}</p>
+            </div>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
   return (
     <div className={classNames(cls.EmployeesPage, {}, [className])}>
       <div className={cls.pageHeader}>
@@ -148,26 +202,12 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
         </div>
       </div>
 
-      <table className={classNames(cls.expandingTable, {}, [className])}>
-        <thead>
-          <th>ФИО</th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </thead>
-        <tbody>
-          {users?.map((item, index) => (
-            // {console.log(item)}
-            <TableRow
-              key={index}
-              data={item}
-              tempMode={true}
-              onEdit={handleOpenModal}
-              onAccept={handleAcceptClick}
-            />
-          ))}
-        </tbody>
-      </table>
+      <Table
+        columnsConfig={columnsConfig}
+        tableData={users}
+        expandableRowConfig={expandableRowConfig}
+        isExpandable={true}
+      />
 
       {isModalVisible && (
         <EditUserModal

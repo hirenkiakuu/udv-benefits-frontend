@@ -9,3 +9,13 @@ export const formatDateToDot = (date: string) => {
 
   return `${year}.${month}.${day}`;
 };
+
+export const formatToLocalDate = (ISODateString: string): string => {
+  const ISODate = new Date(ISODateString);
+
+  const day = String(ISODate.getUTCDate()).padStart(2, "0");
+  const month = String(ISODate.getUTCMonth() + 1).padStart(2, "0");
+  const year = ISODate.getUTCFullYear();
+
+  return `${day}.${month}.${year}`;
+};

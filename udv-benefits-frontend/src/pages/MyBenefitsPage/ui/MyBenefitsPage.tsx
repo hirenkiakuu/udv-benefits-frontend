@@ -1,26 +1,19 @@
 import api from "shared/api/api";
 import cls from "./MyBenefitsPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import { Button, Heading } from "shared/ui";
-import { useEffect, useState } from "react";
+import { Button, Heading, Table } from "shared/ui";
+import { useEffect, useMemo, useState } from "react";
 import { Benefit } from "entities/benefit.model";
 import { createPortal } from "react-dom";
 import CreateBenefitModal from "widgets/CreateBenefitModal";
+import { ColumnsConfig } from "shared/ui/Table/model/table.config";
 
 interface MyBenefitsPageProps {
   className?: string;
 }
 
-interface BenefitExt extends Benefit {
-  benefit: Benefit;
-  category: {
-    categoryId: number;
-    title: string;
-  };
-}
-
 const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
-  const [myBenefits, setMyBenefits] = useState<BenefitExt[]>();
+  const [myBenefits, setMyBenefits] = useState<Benefit[]>();
   const [isBenefitModalVisible, setIsBenefitModalVisible] = useState(false);
 
   useEffect(() => {
@@ -48,6 +41,42 @@ const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
     setIsBenefitModalVisible(false);
   };
 
+  const editBenefitClick = (id: number) => {
+    console.log(id);
+    console.log("---");
+  };
+
+  const columnsConfig: ColumnsConfig<Benefit> = useMemo(
+    // подумать как это вынести вне компонента
+    () => [
+      {
+        header: "Название",
+        render: (benefit) => benefit.title,
+      },
+      {
+        header: "Категория",
+        render: (benefit) => benefit.category.title,
+      },
+      {
+        header: "Дата создания",
+        render: (benefit) => benefit.createdAt, // поменять
+      },
+      {
+        header: "Стоимость",
+        render: (benefit) => `${benefit.price} U`,
+      },
+      {
+        header: "",
+        render: (benefit) => (
+          <Button size="large" onClick={() => editBenefitClick(benefit.id)}>
+            редактировать
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
   return (
     <div className={classNames(cls.myBenefitsPage, {}, [className])}>
       <div className={cls.pageHeader}>
@@ -67,28 +96,7 @@ const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
         </Button>
       </div>
 
-      {/* <table></table> */}
-      <table className={classNames(cls.ordersTable, {}, [className])}>
-        <thead>
-          <tr>
-            <th>Название</th>
-            <th>Категория</th>
-            <th>Дата создания</th>
-            <th>Стоимость</th>
-          </tr>
-        </thead>
-        <tbody>
-          {myBenefits?.map((benefit) => (
-            <tr key={benefit.id}>
-              <td>{benefit.title}</td>
-              <td>{benefit.category.title}</td>
-
-              <td>{benefit.createdAt || "-"}</td>
-              <td>{benefit.price} U</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table tableData={myBenefits} columnsConfig={columnsConfig} />
 
       {isBenefitModalVisible &&
         createPortal(

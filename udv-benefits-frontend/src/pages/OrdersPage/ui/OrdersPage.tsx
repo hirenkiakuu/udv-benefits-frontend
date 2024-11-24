@@ -1,32 +1,51 @@
-import { Heading } from "shared/ui";
+import { Badge, Button, Heading, Table } from "shared/ui";
 import cls from "./OrdersPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import Table from "features/Table";
 import { useEffect, useState } from "react";
 import api from "shared/api/api";
-import { Benefit } from "entities/benefit.model";
+import { Order } from "entities/order.model";
+import { Column } from "shared/ui/Table/model/table.config";
+import { NavLink } from "react-router-dom";
+import { formatToLocalDate } from "shared/lib/formatters/formatDate";
 
 interface OrdersPageProps {
   className?: string;
 }
 
-interface BenefitExt extends Benefit {
-  benefit: Benefit;
-  category: {
-    categoryId: number;
-    title: string;
-  };
-}
-interface Order {
-  benefitId: number;
-  userId: number;
-  id: number;
-  status: string;
-  createdAt: string;
-  activatedAt: string;
-  endsAt: string;
-  benefit: BenefitExt;
-}
+const columnsConfig: Column<Order>[] = [
+  {
+    header: "Название",
+    render: (order: Order) => order.benefit.title,
+  },
+  {
+    header: "Категория",
+    render: (order: Order) => order.benefit.category.title,
+  },
+  {
+    header: "Дата приобретения",
+    render: (order: Order) => formatToLocalDate(order.createdAt),
+  },
+  {
+    header: "Дата окончания",
+    render: (order: Order) => formatToLocalDate(order.endsAt),
+  },
+  {
+    header: "Стоимость",
+    render: (order: Order) => `${order.benefit.price} U`,
+  },
+  {
+    header: "Статус заявки",
+    render: (order: Order) => <Badge status={order.status} />,
+  },
+  {
+    header: "",
+    render: (order: Order) => (
+      <NavLink to={`/orders/${order.id}`}>
+        <Button size="large">Просмотреть</Button>
+      </NavLink>
+    ),
+  },
+];
 
 const OrdersPage = ({ className }: OrdersPageProps) => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -56,7 +75,7 @@ const OrdersPage = ({ className }: OrdersPageProps) => {
           <Heading>Мои заявки</Heading>
           <p>В данной таблице можно посмотреть все свои заявки по льготам</p>
         </div>
-        <Table tableData={orders} />
+        <Table tableData={orders} columnsConfig={columnsConfig} />
       </div>
     </div>
   );

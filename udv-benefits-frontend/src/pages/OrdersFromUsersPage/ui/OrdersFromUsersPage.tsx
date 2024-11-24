@@ -1,43 +1,26 @@
-import { Heading } from "shared/ui";
+import { Badge, Button, Heading, Table } from "shared/ui";
 import cls from "./OrdersFromUsersPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import api from "shared/api/api";
-import ExpandingTable from "features/ExpandingTable";
+// import ExpandingTable from "features/ExpandingTable";
+import { ColumnsConfig } from "shared/ui/Table/model/table.config";
+import { formatToLocalDate } from "shared/lib/formatters/formatDate";
+import { Order } from "entities/order.model";
+import { ExpandableRowCell } from "shared/ui/Table/ui/Table";
 
-const prepareTableData = (orders: Order[]) => {
-  return orders.map((order) => ({
-    id: order.id,
-    fullName: `${order.user.lastName} ${order.user.firstName} ${order.user.middleName}`, // ФИО
-    title: order.benefit.title, // Название льготы
-    type: order.benefit.category.title, // Тип льготы (категория)
-    status: order.status,
-    createdAt: new Date(order.createdAt).toLocaleDateString(), // Дата подачи
-    // Статус заявки
-    user: order.user,
-  }));
-};
-
-interface User {
-  lastName: string;
-  firstName: string;
-  middleName?: string;
-}
-
-interface Benefit {
-  title: string;
-  category: {
-    title: string;
-  };
-}
-
-interface Order {
-  id: number;
-  user: User;
-  benefit: Benefit;
-  status: string;
-  createdAt: string; // Можно использовать Date, если вы обрабатываете его в другом месте
-}
+// const prepareTableData = (orders: Order[]) => {
+//   return orders.map((order) => ({
+//     id: order.id,
+//     fullName: `${order.user.lastName} ${order.user.firstName} ${order.user.middleName}`, // ФИО
+//     title: order.benefit.title, // Название льготы
+//     type: order.benefit.category.title, // Тип льготы (категория)
+//     status: order.status,
+//     createdAt: new Date(order.createdAt).toLocaleDateString(), // Дата подачи
+//     // Статус заявки
+//     user: order.user,
+//   }));
+// };
 
 interface OrdersFromUsersPageProps {
   className?: string;
@@ -53,7 +36,8 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
 
         if (res) {
           console.log(res.data);
-          setOrders(prepareTableData(res.data));
+          // setOrders(prepareTableData(res.data));
+          setOrders(res.data);
         }
       } catch (err) {
         console.error(err);
@@ -65,15 +49,16 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
 
   const handleAccept = async (id: number) => {
     // Remove the accepted order from the orders state
+    console.log(id);
 
     try {
       const res = await api.post(`/api/orders/${id}/approve`);
 
       if (res) {
         console.log(res.data);
-        // setOrders((prevOrders) =>
-        //   prevOrders.filter((order) => order.id !== id)
-        // );
+        setOrders((prevOrders) =>
+          prevOrders.filter((order) => order.id !== id)
+        );
 
         setOrders((prevOrders: Order[]) =>
           prevOrders.map((order) =>
@@ -109,6 +94,139 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
     }
   };
 
+  const columnsConfig: ColumnsConfig<Order> = useMemo(
+    () => [
+      {
+        header: "ФИО",
+        render: (order) => order.user.firstName,
+      },
+      {
+        header: "Название",
+        render: (order) => order.benefit.title,
+      },
+      {
+        header: "Категория",
+        render: (order) => order.benefit.category.title,
+      },
+      {
+        header: "Дата подачи ",
+        render: (order) => formatToLocalDate(order.createdAt),
+      },
+      {
+        header: "Статус заявки",
+        render: (order) => <Badge status={order.status} />,
+      },
+      {
+        header: "",
+        render: (order) => (
+          <div>
+            <Button size="large" onClick={() => handleReject(order.id)}>
+              Отклонить
+            </Button>
+            <Button
+              variant="primary"
+              size="large"
+              onClick={() => handleAccept(order.id)}
+            >
+              Принять
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
+  const expandableRowConfig: ExpandableRowCell<Order>[] = useMemo(
+    () => [
+      {
+        render: (order) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "40px" }}
+          >
+            <div>
+              <p>
+                <b>Юридическое лицо</b>
+              </p>
+              <p>{order.user.firstName}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Подразделение</b>
+              </p>
+              <p>{order.user.department}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Должность</b>
+              </p>
+              <p>{order.user.position}</p>
+            </div>
+          </div>
+        ),
+      },
+      {
+        render: (order) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "40px" }}
+          >
+            <div>
+              <p>
+                <b>Электронная почта</b>
+              </p>
+              <p>{order.user.email}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Дата рождения</b>
+              </p>
+              <p>{order.user.birthDate}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Возраст</b>
+              </p>
+              <p>{order.user.birthDate}</p>
+            </div>
+          </div>
+        ),
+      },
+      {
+        render: (order) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "40px" }}
+          >
+            <div>
+              <p>
+                <b>Телефон</b>
+              </p>
+              <p>{order.user.phone}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Время работы в UDV</b>
+              </p>
+              <p>{order.user.workExperience.months}</p>
+            </div>
+
+            <div>
+              <p>
+                <b>Есть дети</b>
+              </p>
+              <p>{order.user.hasChildren ? "Да" : "Нет"}</p>
+            </div>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
   return (
     <div className={classNames(cls.ordersFromUsersPage, {}, [className])}>
       <div className={cls.pageHeader}>
@@ -119,44 +237,14 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
             отклонить их
           </p>
         </div>
-        {/* <Button variant="primary" size="large">
-          Принять все
-        </Button> */}
       </div>
 
-      <ExpandingTable
-        tableHeaders={[
-          "ФИО",
-          "Название",
-          "Категория",
-          "Статус",
-          "Дата подачи",
-          "",
-        ]}
-        data={orders}
-        onAccept={handleAccept}
-        onAcceptTitle={"Принять"}
-        onReject={handleReject}
-        onRejectTitle="Отклонить"
+      <Table
+        columnsConfig={columnsConfig}
+        tableData={orders}
+        isExpandable={true}
+        expandableRowConfig={expandableRowConfig}
       />
-
-      {/* <table></table> */}
-      {/* <table className={classNames(cls.ordersTable, {}, [className])}>
-        <thead>
-          <tr>
-            <th>ФИО</th>
-            <th>Название</th>
-            <th>Тип</th>
-            <th>Статус</th>
-            <th>Дата подачи</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <TableRow data={mockObj} />
-          <TableRow data={mockObj} />
-        </tbody>
-      </table> */}
     </div>
   );
 };
