@@ -1,25 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-interface UserProfile {
-  id: number;
-  email: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  middleName: string | null;
-  birthDate: string | null;
-  phone: string | null;
-  hasChildren: boolean | null;
-  position: string | null;
-  isAdmin: boolean | null;
-  balance: number | null;
-}
+import { User } from "entities/user.model";
 
 interface UserState {
   tempToken: string | null;
   accessToken: string | null;
   refreshToken: string | null;
-  userProfile: UserProfile;
+  userProfile: User;
 }
 
 const initialState: UserState = {
@@ -38,6 +25,14 @@ const initialState: UserState = {
     position: null,
     isAdmin: null,
     balance: null,
+    isVerified: false,
+    workStartDate: null,
+    workEndDate: null,
+    department: null,
+    workExperience: {
+      months: null,
+      years: null,
+    },
   },
 };
 
@@ -57,18 +52,8 @@ const userSlice = createSlice({
       localStorage.setItem("accessToken", state.accessToken);
       localStorage.setItem("refreshToken", state.refreshToken);
     },
-    setProfile(state, action: PayloadAction<UserProfile>) {
-      state.userProfile.email = action.payload.email;
-      state.userProfile.firstName = action.payload.firstName;
-      state.userProfile.lastName = action.payload.lastName;
-      state.userProfile.middleName = action.payload.middleName;
-      state.userProfile.birthDate = action.payload.birthDate;
-      state.userProfile.phone = action.payload.phone;
-      state.userProfile.hasChildren = action.payload.hasChildren;
-      state.userProfile.position = action.payload.position;
-      state.userProfile.isAdmin = action.payload.isAdmin;
-      state.userProfile.balance = action.payload.balance;
-      state.userProfile.id = action.payload.id;
+    setProfile(state, action: PayloadAction<User>) {
+      state.userProfile = action.payload;
     },
     clearTokens(state) {
       state.accessToken = null;

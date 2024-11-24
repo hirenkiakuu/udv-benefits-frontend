@@ -14,47 +14,20 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(accessToken);
     const authorizeMe = async () => {
       try {
-        const {
-          id,
-          email,
-          firstName,
-          middleName,
-          lastName,
-          birthDate,
-          phone,
-          position,
-          hasChildren,
-          isAdmin,
-          balance,
-        } = await getUserData();
+        const userData = await getUserData();
 
-        dispatch(
-          userActions.setProfile({
-            id,
-            email,
-            firstName,
-            middleName,
-            lastName,
-            birthDate,
-            phone,
-            position,
-            hasChildren,
-            isAdmin,
-            balance,
-          })
-        );
+        dispatch(userActions.setProfile(userData));
       } catch (err) {
         console.error(err);
       }
     };
 
-    if (accessToken !== undefined) {
+    if (accessToken) {
       authorizeMe();
     }
-  }, []);
+  }, [accessToken]);
 
   if (!accessToken) return <Navigate to="/login" replace />;
   return children;
