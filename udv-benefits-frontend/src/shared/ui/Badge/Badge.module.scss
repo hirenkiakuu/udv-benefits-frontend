@@ -1,0 +1,46 @@
+.badge {
+  border-radius: 16px;
+  padding: 4px 12px 4px 10px;
+  max-width: 215px;
+  //   height: 28px;
+
+  line-height: 1;
+  font-size: 14px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+
+  &.approved {
+    color: #027a48;
+    background: #ecfdf3;
+  }
+
+  &.rejected {
+    color: #b42318;
+    background: #fef3f2;
+  }
+
+  &.pending {
+    color: #414651;
+    background: #f5f5f5;
+  }
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+
+  &.approved {
+    background: #12b76a;
+  }
+
+  &.rejected {
+    background: #f04438;
+  }
+
+  &.pending {
+    background: #717680;
+  }
+}
