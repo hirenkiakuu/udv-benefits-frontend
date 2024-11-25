@@ -1,8 +1,6 @@
-import Heading from "shared/ui/Heading/Heading";
 import cls from "./BenefitCard.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import benefitPlaceholder from "shared/assets/images/benefit-placeholder.png";
-import Divider from "shared/assets/icons/divider.svg";
 import { Button } from "shared/ui";
 import { Benefit } from "entities/benefit.model";
 import { NavLink } from "react-router-dom";
@@ -10,44 +8,49 @@ import { NavLink } from "react-router-dom";
 interface BenefitCardProps {
   className?: string;
   benefitData: Benefit;
-  benefitsAvailability?: string;
+  benefitsAvailability?: "available" | "active" | "unavailable";
 }
 
 const BenefitCard = ({
   className,
   benefitData,
-  benefitsAvailability,
+  benefitsAvailability = "available",
 }: BenefitCardProps) => {
-  const { title, description, price, id } = benefitData;
+  const { title, price, id } = benefitData;
 
-  let buttonText = "Приобрести";
-  let disabledState = false;
+  console.log("benefit card render");
 
-  if (benefitsAvailability === "active") {
-    buttonText = "Приобретено";
-    disabledState = true;
-  } else if (benefitsAvailability === "unavailable") {
-    buttonText = "Недоступно";
-    disabledState = true;
-  }
+  const buttonStates = {
+    active: { buttonText: "Приобретено", disabled: true },
+    unavailable: { buttonText: "Недоступно", disabled: true },
+    available: { buttonText: "Приобрести", disabled: false },
+  };
+
+  const { buttonText, disabled } = buttonStates[benefitsAvailability];
 
   return (
     <div className={classNames(cls.benefitCard, {}, [className])}>
-      <div className={cls.benefitTitle}>
-        <img src={benefitPlaceholder} alt="изображение льготы" />
-        <Heading size="medium">{title}</Heading>
+      <div className={cls.benefitHeader}>
+        <img
+          src={benefitPlaceholder}
+          className={cls.benefitImg}
+          alt="изображение льготы"
+        />
       </div>
-      <div className={cls.benefitDescription}>
-        <p>{description}</p>
-      </div>
-      <Divider width="100%" height="0.38px" viewBox="0 0 270 0.38" />
-      <div className={cls.benefitPrice}>
-        <span>{price} U</span>
-        <NavLink to={`/benefits/${id}`}>
-          <Button variant="primary" size="large" disabled={disabledState}>
-            {buttonText}
-          </Button>
-        </NavLink>
+
+      <div className={cls.benefitFooter}>
+        <div className={cls.benefitDescription}>
+          <p className={cls.benefitTitle}>{title}</p>
+          <p className={cls.benefitDistributor}> Альфа-страхование</p>
+        </div>
+        <div className={cls.benefitPrice}>
+          <span>{price} U</span>
+          <NavLink to={`/benefits/${id}`}>
+            <Button variant="primary" size="large" disabled={disabled}>
+              {buttonText}
+            </Button>
+          </NavLink>
+        </div>
       </div>
     </div>
   );

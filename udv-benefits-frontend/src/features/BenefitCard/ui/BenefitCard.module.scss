@@ -1,56 +1,51 @@
 .benefit-card {
   font-family: var(--font-family-body-golos);
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
-  min-width: 318px;
-  max-width: 318px;
-  // min-height: 270px;
-  border-radius: 12px;
-  padding: 16px 24px;
+  color: var(--color-graphite-1);
+  border-radius: 8px;
+  width: 360px;
+  min-height: 360px;
+
+  background: var(--color-neutral-white);
+  box-shadow:
+    0 4px 6px -2px rgba(10, 13, 18, 0.03),
+    0 12px 16px -4px rgba(10, 13, 18, 0.08);
+
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  background: var(--color-neutral-white);
-  color: var(--color-graphite-1);
 }
 
-.benefit-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 80px;
+.benefit-header {
+  width: 100%;
+  height: 200px;
+}
 
-  h2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* количество строк для показа */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.benefit-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.benefit-footer {
+  flex: 1;
+  padding: 26px 32px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .benefit-description {
-  // height: 100%;
-  min-height: 70px;
-  max-height: 70px;
-  text-overflow: ellipsis;
-  // white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  p {
-    // white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* количество строк для показа */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 4.5em;
-  }
+.benefit-distributor {
+  color: var(--color-graphite-3);
+  font-size: 14px;
 }
 
 .benefit-price {
@@ -59,6 +54,6 @@
   align-items: center;
 
   span {
-    margin-left: 15px;
+    font-weight: 500;
   }
 }
