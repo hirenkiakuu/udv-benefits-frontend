@@ -5,10 +5,11 @@
 .benefits-board {
   display: flex;
   gap: 47px;
-  //   width: 100%;
 }
 
 .benefit-carousels {
   width: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }

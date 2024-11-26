@@ -52,6 +52,24 @@
     }
   }
 
+  &.danger {
+    background: var(--color-danger);
+    color: var(--color-white);
+
+    &.large {
+      box-shadow: 0 2px 0 0 rgba(193, 231, 221, 0.2);
+
+      &:hover {
+        background: #fc696b;
+      }
+
+      &:disabled {
+        background: var(--color-graphite-4);
+        color: var(--color-graphite-2);
+      }
+    }
+  }
+
   &.default {
     background: var(--color-neutral-white);
     color: var(--color-graphite-1);

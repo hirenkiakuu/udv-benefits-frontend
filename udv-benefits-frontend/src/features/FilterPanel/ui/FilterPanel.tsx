@@ -8,6 +8,7 @@ import Transport from "shared/assets/icons/transport.svg";
 import Food from "shared/assets/icons/food.svg";
 import Giftcard from "shared/assets/icons/giftcard.svg";
 import FilterButton from "features/FilterButton";
+import { memo } from "react";
 
 interface FilterPanelProps {
   className?: string;
@@ -91,4 +92,4 @@ const FilterPanel = ({
   );
 };
 
-export default FilterPanel;
+export default memo(FilterPanel);

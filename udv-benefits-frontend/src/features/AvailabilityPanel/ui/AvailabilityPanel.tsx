@@ -1,3 +1,4 @@
+import { memo } from "react";
 import cls from "./AvailabilityPanel.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import { Button } from "shared/ui";
@@ -45,4 +46,4 @@ const AvailabilityPanel = ({
   );
 };
 
-export default AvailabilityPanel;
+export default memo(AvailabilityPanel);

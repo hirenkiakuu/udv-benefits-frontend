@@ -1,0 +1,16 @@
+.benefits-group-list-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.benefits-category-title {
+  color: var(--color-graphite-1);
+  //   font-weight: 600;
+}
+
+.benefits-list {
+  display: flex;
+  gap: 16px;
+}

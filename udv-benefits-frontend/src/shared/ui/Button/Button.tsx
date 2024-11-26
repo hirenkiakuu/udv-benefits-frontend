@@ -5,7 +5,7 @@ import { classNames } from "shared/lib/classNames/classNames";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children: ReactNode;
-  variant?: "primary" | "default" | "text" | "link";
+  variant?: "primary" | "default" | "text" | "link" | "danger";
   size?: "small" | "large";
   isActive?: boolean;
 }

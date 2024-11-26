@@ -1,51 +1,40 @@
 import cls from "./BenefitsExplorer.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import BenefitsCarousel from "features/BenefitsCarousel";
 import FilterPanel from "features/FilterPanel";
-import { useEffect, useState } from "react";
 import AvailabilityPanel from "features/AvailabilityPanel";
-import api from "shared/api/api";
-import { BenefitsGroup } from "entities/benefit.model";
+import { useGroupedBenefits } from "../model/hooks/useGroupedBenefits";
+import { useCallback } from "react";
+import BenefitsGroupList from "features/BenefitsGroupList";
 
 interface BenefitsExplorerProps {
   className?: string;
 }
 
 const BenefitsExplorer = ({ className }: BenefitsExplorerProps) => {
-  const [benefits, setBenefits] = useState<BenefitsGroup[]>();
-  const [benefitsAvailability, setBenefitsAvailability] = useState("available");
-  const [benefitsCategory, setBenefitsCategory] = useState("all");
+  const {
+    groupedBenefits,
+    benefitsAvailability,
+    setBenefitsAvailability,
+    benefitsCategory,
+    setBenefitsCategory,
+  } = useGroupedBenefits();
 
-  useEffect(() => {
-    const getBenefits = async () => {
-      try {
-        const res = await api.get(
-          `/api/benefits/grouped?benefit_type=${benefitsAvailability}`
-        );
+  const handleBenefitCategoryChange = useCallback(
+    (category: string) => {
+      setBenefitsCategory(category);
+    },
+    [setBenefitsCategory]
+  );
 
-        if (res) {
-          console.log(res.data);
-          setBenefits(res.data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getBenefits();
-  }, [benefitsAvailability]);
-
-  const handleBenefitCategoryChange = (category: string) => {
-    console.log("CALLLL");
-    setBenefitsCategory(category);
-  };
-
-  const handleAvailabilityChange = (availability: string) => {
-    setBenefitsAvailability(availability);
-  };
+  const handleAvailabilityChange = useCallback(
+    (availability: string) => {
+      setBenefitsAvailability(availability);
+    },
+    [setBenefitsAvailability]
+  );
 
   return (
-    <section className={classNames(cls.BenefitsExplorer, {}, [className])}>
+    <section className={classNames(cls.benefitsExplorer, {}, [className])}>
       <AvailabilityPanel
         currentBenefitsAvailability={benefitsAvailability}
         onAvailabilityChange={handleAvailabilityChange}
@@ -57,16 +46,13 @@ const BenefitsExplorer = ({ className }: BenefitsExplorerProps) => {
           onBenefitCategoryChange={handleBenefitCategoryChange}
         />
         <div className={cls.benefitCarousels}>
-          {benefits &&
-            benefits.map((benefitsGroup) => (
-              <BenefitsCarousel
-                benefitsAvailability={benefitsAvailability}
-                key={benefitsGroup.categoryId}
-                benefits={benefitsGroup.benefits}
-                categoryTitle={benefitsGroup.categoryTitle}
-                categoryId={benefitsGroup.categoryId}
-              />
-            ))}
+          {groupedBenefits.map((benefitsGroup) => (
+            <BenefitsGroupList
+              key={benefitsGroup.categoryId}
+              benefitsAvailability={benefitsAvailability}
+              benefitsGroup={benefitsGroup}
+            />
+          ))}
         </div>
       </div>
     </section>
