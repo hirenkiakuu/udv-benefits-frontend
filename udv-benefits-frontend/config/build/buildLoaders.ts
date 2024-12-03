@@ -25,6 +25,25 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     ],
   };
 
+  const cssLoaderForPlainCss = {
+    test: /\.css$/i,
+    use: [
+      options.isDev ? "style-loader" : MiniCssExtractPlugin.loader,
+      {
+        loader: "css-loader",
+        options: {
+          modules: {
+            auto: (resPath: string) => Boolean(resPath.includes(".module.")),
+            localIdentName: options.isDev
+              ? "[path][name]__[local]--[hash:base64:5]"
+              : "[hash:base64:8]",
+            namedExport: false,
+          },
+        },
+      },
+    ],
+  };
+
   const assetLoader = {
     test: /\.(png|jpg|jpeg|gif)$/i,
     type: "asset/resource",
@@ -60,7 +79,7 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
           [
             "@babel/preset-react",
             {
-              runtime: options.isDev ? "automatic" : "classic",
+              runtime: "automatic",
             },
           ],
         ],
@@ -69,5 +88,12 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     },
   };
 
-  return [assetLoader, cssLoader, fontLoader, babelLoader, svgrLoader];
+  return [
+    assetLoader,
+    cssLoader,
+    cssLoaderForPlainCss,
+    fontLoader,
+    babelLoader,
+    svgrLoader,
+  ];
 }
