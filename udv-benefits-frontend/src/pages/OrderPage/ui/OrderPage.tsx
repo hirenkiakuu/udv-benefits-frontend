@@ -4,33 +4,9 @@ import { classNames } from "shared/lib/classNames/classNames";
 import api from "shared/api/api";
 import { NavLink, useParams } from "react-router-dom";
 import { Button, Heading } from "shared/ui";
-import BenefitPlaceholder from "shared/assets/images/benefit-placeholder.png";
 import Arrow from "shared/assets/icons/arrow.svg";
-
-interface Order {
-  benefitId: number;
-  userId: number;
-  id: number;
-  status: string;
-  createdAt: string;
-  activatedAt: string;
-  endsAt: string;
-  benefit: {
-    title: string;
-    description: string;
-    price: number;
-    period: string;
-    instructions: string;
-    categoryId: number;
-    isCancellable: true;
-    id: number;
-    createdAt: string;
-    category: {
-      title: string;
-      id: number;
-    };
-  };
-}
+import { Order } from "entities/order.model";
+import CommentsPanel from "features/CommentsPanel";
 
 interface OrderPageProps {
   className?: string;
@@ -50,7 +26,19 @@ const formatStatus = (status: string) => {
 
 const OrderPage = ({ className }: OrderPageProps) => {
   const [order, setOrder] = useState<Order>();
+  const [displayableOption, setDisplayableOption] = useState(0);
   const { id } = useParams();
+
+  const handleReject = async () => {
+    try {
+      const res = await api.post(`/api/orders/${id}/reject`);
+      if (res) {
+        setOrder((prevOrder) => ({ ...prevOrder, status: "rejected" }));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const getOrder = async () => {
@@ -78,50 +66,108 @@ const OrderPage = ({ className }: OrderPageProps) => {
         <NavLink className={cls.backButton} to="/orders">
           <Arrow width="24px" height="24px" />
         </NavLink>
-        <div className={cls.left}>
-          <div className={cls.pageHeader}>
-            <img width="72px" height="72px" src={BenefitPlaceholder} alt="" />
-            <Heading>{order?.benefit.title}</Heading>
+        <div className={cls.benefitImg}>
+          <img
+            src={order?.benefit.picture}
+            className={cls.benefitImg}
+            alt="Изображение льготы"
+          />
+        </div>
+        <div className={cls.benefitInfo}>
+          <div className={cls.benefitHeader}>
+            <div className={cls.benefitTitle}>
+              <Heading
+                className={classNames(
+                  cls.status,
+                  {
+                    [cls.danger]: order?.status === "rejected",
+                    [cls.approved]: order?.status === "approved",
+                    [cls.pending]: order?.status === "in_work",
+                  },
+                  []
+                )}
+              >
+                {formatStatus(order?.status)}
+              </Heading>
+              <Heading>{order?.benefit?.title}</Heading>
+            </div>
+
+            <p>{order?.benefit.provider}</p>
           </div>
-          <div className={cls.orderInfo}>
-            <p>{order?.benefit.description}</p>
-            <p>
-              <b>Срок действия: </b>
-              {formatPeriod(order?.benefit.period)}
+
+          <div className={cls.benefitDescription}>
+            <div
+              dangerouslySetInnerHTML={{ __html: order?.benefit.description }}
+            ></div>
+            <p className={cls.benefitPeriod}>
+              <b>Срок действия: {formatPeriod(order?.benefit.period)}</b>
             </p>
           </div>
 
-          <Heading size="medium">Инструкция по активации:</Heading>
-          <p>{order?.benefit.instructions}</p>
+          {order?.benefit.options.length !== 0 && (
+            <div className={cls.benefitOptionsContainer}>
+              <ul className={cls.benefitOptionsList}>
+                {order?.benefit.options.map((option, index) => (
+                  <li
+                    key={option.id}
+                    className={classNames(
+                      cls.benefitOptionsListItem,
+                      { [cls.active]: index === displayableOption },
+                      []
+                    )}
+                    onClick={() => setDisplayableOption(index)}
+                  >
+                    {option.title}
+                  </li>
+                ))}
+              </ul>
+
+              <div
+                className={cls.benefitOptionDescription}
+                dangerouslySetInnerHTML={{
+                  __html:
+                    order?.benefit?.options[displayableOption]?.description,
+                }}
+              ></div>
+            </div>
+          )}
+
+          <Heading className={cls.instructionHeader} size="medium">
+            Инструкция по активации
+          </Heading>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: order?.benefit.content.instructions,
+            }}
+          ></div>
         </div>
 
-        <div className={cls.right}>
-          <Heading>{order?.benefit.price} U</Heading>
-          <Heading
-            className={classNames(
-              cls.status,
-              {
-                [cls.danger]: order?.status === "rejected",
-                [cls.approved]: order?.status === "approved",
-              },
-              []
-            )}
-          >
-            {formatStatus(order?.status)}
+        <div className={cls.benefitPurchase}>
+          <Heading className={cls.benefitPrice} size="medium">
+            {order?.benefit.price} U-points
           </Heading>
 
-          <div className={cls.orderTransactionInfo}>
-            <Heading size="medium">Данные об операции:</Heading>
-            <p>
-              Дата поступления заявки:{" "}
-              {new Date(order?.createdAt).toLocaleString()}
-            </p>
-          </div>
-          {order?.benefit.isCancellable && order?.status === "approved" && (
-            <Button variant="primary" size="large">
+          {order?.option && (
+            <div className={cls.benefitChosenOption}>
+              <p>Выбранный вариант</p>
+              <button className={cls.benefitOptionsButton}>
+                {order?.option?.title}
+              </button>
+            </div>
+          )}
+
+          {order?.status == "approved" && (
+            <Button
+              variant="primary"
+              size="large"
+              className={cls.rejectButton}
+              onClick={handleReject}
+            >
               Отменить бенефит
             </Button>
           )}
+
+          {order?.comments && <CommentsPanel comments={order?.comments} />}
         </div>
       </div>
     </div>
