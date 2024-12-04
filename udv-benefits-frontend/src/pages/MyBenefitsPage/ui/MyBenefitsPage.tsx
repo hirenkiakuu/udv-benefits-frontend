@@ -7,6 +7,7 @@ import { Benefit } from "entities/benefit.model";
 import { createPortal } from "react-dom";
 import CreateBenefitModal from "widgets/CreateBenefitModal";
 import { ColumnsConfig } from "shared/ui/Table/model/table.config";
+import { formatToLocalDate } from "shared/lib/formatters/formatDate";
 
 interface MyBenefitsPageProps {
   className?: string;
@@ -59,7 +60,7 @@ const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
       },
       {
         header: "Дата создания",
-        render: (benefit) => benefit.createdAt, // поменять
+        render: (benefit) => formatToLocalDate(benefit.createdAt), // поменять
       },
       {
         header: "Стоимость",

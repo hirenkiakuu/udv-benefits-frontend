@@ -4,9 +4,21 @@
   padding: 0;
 }
 
-// body {
-//   height: 100vh;
-// }
+body {
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #666666;
+}
 
 input,
 textarea,
@@ -21,9 +33,15 @@ label {
 }
 
 ul,
+ol,
 li {
   margin: 0;
   padding: 0;
+}
+
+ol {
+  margin-left: 20px;
+  list-style: decimal;
 }
 
 ul {

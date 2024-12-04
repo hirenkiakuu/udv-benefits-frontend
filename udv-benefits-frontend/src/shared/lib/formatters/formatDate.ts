@@ -19,3 +19,13 @@ export const formatToLocalDate = (ISODateString: string): string => {
 
   return `${day}.${month}.${year}`;
 };
+
+export const formatToHours = (isoString: string) => {
+  const date = new Date(isoString);
+  const timeString = date.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return timeString;
+};

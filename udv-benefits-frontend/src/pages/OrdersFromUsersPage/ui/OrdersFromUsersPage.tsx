@@ -56,9 +56,9 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
 
       if (res) {
         console.log(res.data);
-        setOrders((prevOrders) =>
-          prevOrders.filter((order) => order.id !== id)
-        );
+        // setOrders((prevOrders) =>
+        //   prevOrders.filter((order) => order.id !== id)
+        // );
 
         setOrders((prevOrders: Order[]) =>
           prevOrders.map((order) =>
@@ -119,17 +119,35 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
       {
         header: "",
         render: (order) => (
-          <div>
-            <Button size="large" onClick={() => handleReject(order.id)}>
-              Отклонить
-            </Button>
-            <Button
-              variant="primary"
-              size="large"
-              onClick={() => handleAccept(order.id)}
-            >
-              Принять
-            </Button>
+          <div className={cls.actionButtons}>
+            {order.status === "in_work" && (
+              <>
+                <Button
+                  variant="danger"
+                  size="large"
+                  onClick={() => handleReject(order.id)}
+                >
+                  Отклонить
+                </Button>
+                <Button
+                  variant="primary"
+                  size="large"
+                  onClick={() => handleAccept(order.id)}
+                >
+                  Принять
+                </Button>
+              </>
+            )}
+
+            {order.status === "approved" && (
+              <Button
+                variant="danger"
+                size="large"
+                onClick={() => handleReject(order.id)}
+              >
+                Отклонить
+              </Button>
+            )}
           </div>
         ),
       },
