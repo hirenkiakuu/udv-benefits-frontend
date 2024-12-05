@@ -1,6 +1,5 @@
 import cls from "./BenefitCard.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import benefitPlaceholder from "shared/assets/images/benefit-placeholder.png";
 import { Button } from "shared/ui";
 import { Benefit } from "entities/benefit.model";
 import { NavLink } from "react-router-dom";
@@ -16,13 +15,11 @@ const BenefitCard = ({
   benefitData,
   benefitsAvailability = "available",
 }: BenefitCardProps) => {
-  const { title, price, id } = benefitData;
-
-  console.log("benefit card render");
+  const { title, price, id, picture, provider } = benefitData;
 
   const buttonStates = {
     active: { buttonText: "Приобретено", disabled: true },
-    unavailable: { buttonText: "Недоступно", disabled: true },
+    unavailable: { buttonText: "Просмотреть", disabled: false },
     available: { buttonText: "Приобрести", disabled: false },
   };
 
@@ -32,7 +29,7 @@ const BenefitCard = ({
     <div className={classNames(cls.benefitCard, {}, [className])}>
       <div className={cls.benefitHeader}>
         <img
-          src={benefitPlaceholder}
+          src={picture}
           className={cls.benefitImg}
           alt="изображение льготы"
         />
@@ -41,7 +38,7 @@ const BenefitCard = ({
       <div className={cls.benefitFooter}>
         <div className={cls.benefitDescription}>
           <p className={cls.benefitTitle}>{title}</p>
-          <p className={cls.benefitDistributor}> Альфа-страхование</p>
+          <p className={cls.benefitDistributor}>{provider}</p>
         </div>
         <div className={cls.benefitPrice}>
           <span>{price} U</span>

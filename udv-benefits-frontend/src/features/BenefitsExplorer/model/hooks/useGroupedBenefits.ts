@@ -4,7 +4,9 @@ import api from "shared/api/api";
 
 export const useGroupedBenefits = () => {
   const [groupedBenefits, setGroupedBenefits] = useState<BenefitsGroup[]>([]);
-  const [benefitsAvailability, setBenefitsAvailability] = useState("available");
+  const [benefitsAvailability, setBenefitsAvailability] = useState<
+    "available" | "unavailable" | "active"
+  >("available");
   const [benefitsCategory, setBenefitsCategory] = useState("all");
 
   useEffect(() => {

@@ -19,6 +19,7 @@ import DashboardPage from "pages/DashboardPage";
 import MyBenefitsPage from "pages/MyBenefitsPage";
 import OrdersFromUsersPage from "pages/OrdersFromUsersPage";
 import EmployeesPage from "pages/EmployeesPage";
+import StatisticsPage from "pages/StatisticsPage";
 
 const AppRouter = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const AppRouter = createBrowserRouter([
           {
             path: "employees",
             element: <EmployeesPage />,
+          },
+          {
+            path: "statistics",
+            element: <StatisticsPage />,
           },
         ],
       },

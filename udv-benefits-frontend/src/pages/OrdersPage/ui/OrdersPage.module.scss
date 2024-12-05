@@ -14,3 +14,23 @@
     margin-bottom: 4px;
   }
 }
+
+.leave-comment-button {
+  position: relative;
+}
+
+.unread-comments-count {
+  position: absolute;
+  right: -7px;
+  top: -5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 15px;
+  height: 14px;
+  // z-index: 1000;
+  background: var(--color-danger);
+  color: var(--color-white);
+  font-size: 10px;
+}

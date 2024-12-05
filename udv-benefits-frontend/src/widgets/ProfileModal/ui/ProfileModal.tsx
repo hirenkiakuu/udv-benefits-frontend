@@ -6,7 +6,10 @@ import Avatar from "shared/assets/images/Avatar.png";
 import { RootState } from "app/providers/store/store";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { formatDateToDot } from "shared/lib/formatters/formatDate";
+import {
+  formatDateToDot,
+  formatYearsAndMonths,
+} from "shared/lib/formatters/formatDate";
 
 interface ProfileModalProps {
   className?: string;
@@ -24,6 +27,7 @@ const ProfileModal = ({ className, onClose }: ProfileModalProps) => {
     phone,
     position,
     isAdmin,
+    workExperience,
   } = useSelector((s: RootState) => s.user.userProfile);
 
   useEffect(() => {
@@ -78,7 +82,12 @@ const ProfileModal = ({ className, onClose }: ProfileModalProps) => {
             <div className={cls.profileModalDataRow}>
               <div className={cls.profileModalDataCell}>
                 <p>Стаж работы в UDV</p>
-                <p>3 года</p>
+                <p>
+                  {formatYearsAndMonths(
+                    workExperience.years,
+                    workExperience.months
+                  )}
+                </p>
               </div>
               <div className={cls.profileModalDataCell}>
                 <p>Электронная почта</p>
@@ -93,7 +102,7 @@ const ProfileModal = ({ className, onClose }: ProfileModalProps) => {
               </div>
               <div className={cls.profileModalDataCell}>
                 <p>Статус</p>
-                <p>{isAdmin ? "hr" : "сотрудник"}</p>
+                <p>{isAdmin ? "администратор" : "сотрудник"}</p>
               </div>
             </div>
 

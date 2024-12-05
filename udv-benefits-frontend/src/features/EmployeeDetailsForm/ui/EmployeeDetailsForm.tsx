@@ -13,6 +13,7 @@ import {
   EmployeeFormData,
 } from "../model/employee-details-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { formatDate } from "shared/lib/formatters/formatDate";
 
 interface EmployeeDetailsFormProps {
   className?: string;
@@ -24,15 +25,9 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
   const {
     register,
     handleSubmit,
-    clearErrors,
     formState: { errors },
   } = useForm<EmployeeFormData>({
     resolver: zodResolver(employeeDetailsSchema),
-    defaultValues: {
-      firstName: "",
-      middleName: "",
-      lastName: "",
-    },
   });
 
   const navigate = useNavigate();
@@ -44,6 +39,8 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
       const res = await api.post("/api/users", {
         email,
         ...data,
+        birthDate: formatDate(data.birthDate),
+        workStartDate: formatDate(data.workStartDate),
       });
 
       if (res) {

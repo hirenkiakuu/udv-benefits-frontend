@@ -37,6 +37,14 @@ const DashboardPage = ({ className }: DashboardPageProps) => {
                 <div className={cls.navButton}>Сотрудники</div>
               </NavLink>
             </li>
+            <li className={cls.sidebarNavListItem}>
+              <NavLink
+                to="/hr-dashboard/statistics"
+                className={({ isActive }) => (isActive ? cls.active : "")}
+              >
+                <div className={cls.navButton}>Статистика</div>
+              </NavLink>
+            </li>
           </ul>
         </nav>
       </aside>

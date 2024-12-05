@@ -14,11 +14,11 @@ const EmailRegistrationSection = ({
   return (
     <div className={classNames(cls.emailRegistrationSection, {}, [className])}>
       <div className={cls.greeting}>
-        <Heading>Добро пожаловать в кафетерий льгот!</Heading>
-        <Heading size="medium">
-          Мы рады видеть вас здесь! <br></br> Создайте аккаунт, чтобы открыть
-          доступ к выбору бенефитов.
-        </Heading>
+        <Heading size="medium">Добро пожаловать в кафетерий льгот!</Heading>
+        <p>
+          Мы рады видеть Вас! <br></br> Создайте аккаунт, чтобы открыть доступ к
+          выбору бенефитов.
+        </p>
       </div>
 
       <EmailForm submitAction="store" buttonText="Продолжить регистрацию" />

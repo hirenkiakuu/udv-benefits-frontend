@@ -7,6 +7,11 @@ import EditUserModal from "widgets/EditUserModal";
 import { ColumnsConfig } from "shared/ui/Table/model/table.config";
 import { User } from "entities/user.model";
 import { ExpandableRowCell } from "shared/ui/Table/ui/Table";
+import {
+  formatDateToDot,
+  formatYears,
+  formatYearsAndMonths,
+} from "shared/lib/formatters/formatDate";
 
 interface EmployeesPageProps {
   className?: string;
@@ -26,7 +31,7 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
     setIsModalVisible(false);
   };
 
-  const handleUserUpdate = (updatedUser: UserData) => {
+  const handleUserUpdate = (updatedUser: User) => {
     setUsers((prevUsers) =>
       prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
     );
@@ -78,6 +83,18 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
       render: (user) => `${user.firstName} ${user.middleName} ${user.lastName}`,
     },
     {
+      header: "",
+      render: (user) => (
+        <Button
+          onClick={() => handleOpenModal(user.id)}
+          variant="link"
+          size="large"
+        >
+          Редактировать данные
+        </Button>
+      ),
+    },
+    {
       header: "Дата подачи заявки",
       render: (user) => user.lastName,
     },
@@ -111,7 +128,7 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
               <p>
                 <b>Юридическое лицо</b>
               </p>
-              <p>{user.firstName}</p>
+              <p>{user.legalEntity}</p>
             </div>
 
             <div>
@@ -146,14 +163,14 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
               <p>
                 <b>Дата рождения</b>
               </p>
-              <p>{user.birthDate}</p>
+              <p>{formatDateToDot(user.birthDate)}</p>
             </div>
 
             <div>
               <p>
                 <b>Возраст</b>
               </p>
-              <p>{user.birthDate}</p>
+              <p>{formatYears(user.age)}</p>
             </div>
           </div>
         ),
@@ -174,7 +191,12 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
               <p>
                 <b>Время работы в UDV</b>
               </p>
-              <p>{user.workExperience.months}</p>
+              <p>
+                {formatYearsAndMonths(
+                  user.workExperience.years,
+                  user.workExperience.months
+                )}
+              </p>
             </div>
 
             <div>

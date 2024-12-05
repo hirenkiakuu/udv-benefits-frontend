@@ -45,7 +45,7 @@ export const TableRow = <T extends { id: string | number }>({
             <td colSpan={columnsConfig.length}>
               <div
                 className={cls.fullInfo}
-                style={{ display: "flex", gap: "10px" }}
+                style={{ display: "flex", gap: "70px" }}
               >
                 {expandableRowConfig.map((item) => (
                   <div key={data.id}>{item.render(data)}</div>

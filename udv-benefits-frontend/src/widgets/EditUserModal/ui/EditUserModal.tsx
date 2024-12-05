@@ -5,6 +5,7 @@ import { Button } from "shared/ui";
 import { User } from "entities/user.model";
 import { ChangeEvent, useState } from "react";
 import api from "shared/api/api";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 // interface UserData {
 //   id: number;
@@ -52,12 +53,32 @@ function formatDateToDot(dateString: string): string {
   return `${day}.${month}.${year}`;
 }
 
+type EmployeeFormData = {
+  lastName: string;
+  firstName: string;
+  middleName: string;
+  birthDate: string;
+  phone: string;
+  position: string;
+  department: string;
+  hasChildren: string;
+  isAdmin: string;
+  workStartDate: string;
+  legalEntity: string;
+};
+
 const EditUserModal = ({
   className,
   onClose,
   currentUser,
   onUserUpdate,
 }: EditUserModalProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EmployeeFormData>({});
+
   const [formData, setFormData] = useState({
     lastName: currentUser.lastName || "",
     firstName: currentUser.firstName || "",
@@ -86,8 +107,9 @@ const EditUserModal = ({
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<EmployeeFormData> = async (data) => {
+    console.log(data);
+
     try {
       const res = await api.patch(`/api/users/${currentUser.id}`, {
         ...formData,
@@ -106,13 +128,14 @@ const EditUserModal = ({
 
   return (
     <div className={classNames(cls.editUserModal, {}, [className])}>
-      <form className={cls.editUserForm} onSubmit={handleSubmit}>
+      <form className={cls.editUserForm} onSubmit={handleSubmit(onSubmit)}>
         <div className={cls.formInputRow}>
           <label htmlFor="lastName">Фамилия</label>
           <Input
             name="lastName"
             placeholder={currentUser.lastName}
             onChange={handleInputChange}
+            {...register("lastName")}
           />
         </div>
 

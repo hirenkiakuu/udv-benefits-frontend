@@ -22,21 +22,28 @@
 }
 
 .edit-user-modal::-webkit-scrollbar {
-  width: 6px; /* Устанавливаем ширину скроллбара */
+  width: 5px; /* Устанавливаем ширину скроллбара * */
+  // margin-left: -10px;
+  // transform: translateX(-10px);
 }
 
 .edit-user-modal::-webkit-scrollbar-track {
-  //   background: transparent; /* Задаем цвет фона скроллбара */
+  background: transparent;
+  border-bottom-right-radius: 12px; /* Скругленные края ползунка */
+  border-top-right-radius: 12px;
 }
 
 .edit-user-modal::-webkit-scrollbar-thumb {
   //   background-color: rgba(0, 0, 0, 0.3); /* Цвет ползунка */
   border-bottom-right-radius: 12px; /* Скругленные края ползунка */
+  border-top-right-radius: 12px;
+  border-radius: 12px;
+  // margin-left: -10px;
+  // transform: translateX(-10px);
 }
 
-/* Добавьте hover-эффект для ползунка, чтобы он выглядел аккуратно */
 .edit-user-modal::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.5); /* Затемняем при наведении */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .edit-user-form {

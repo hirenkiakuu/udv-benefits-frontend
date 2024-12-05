@@ -18,13 +18,7 @@ const CreateBenefitModal = ({
   className,
   onClose,
 }: CreateBenefitModalProps) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    watch,
-  } = useForm<BenefitFormData>({
+  const { register, handleSubmit, control, watch } = useForm<BenefitFormData>({
     defaultValues: {
       options: [],
     },
@@ -32,7 +26,7 @@ const CreateBenefitModal = ({
 
   const isOptionsEnabled = watch("enableOptions" as keyof BenefitFormData);
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: "options", // Массив для вариантов льгот
   });

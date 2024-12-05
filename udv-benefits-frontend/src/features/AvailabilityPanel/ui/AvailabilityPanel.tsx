@@ -33,14 +33,14 @@ const AvailabilityPanel = ({
         >
           Приобретенные льготы
         </Button>
-        {/* <Button
+        <Button
           variant="text"
           size="large"
           isActive={currentBenefitsAvailability === "unavailable"}
           onClick={() => onAvailabilityChange("unavailable")}
         >
           Недоступные льготы
-        </Button> */}
+        </Button>
       </div>
     </div>
   );

@@ -33,6 +33,8 @@ const initialState: UserState = {
       months: null,
       years: null,
     },
+    age: null,
+    legalEntity: null,
   },
 };
 

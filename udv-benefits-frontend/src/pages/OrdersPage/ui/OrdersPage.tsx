@@ -41,7 +41,14 @@ const columnsConfig: Column<Order>[] = [
     header: "",
     render: (order: Order) => (
       <NavLink to={`/orders/${order.id}`}>
-        <Button size="large">Просмотреть</Button>
+        <Button className={cls.leaveCommentButton} size="large">
+          Просмотреть
+          {order.unreadComments !== 0 && (
+            <div className={cls.unreadCommentsCount}>
+              {order.unreadComments}
+            </div>
+          )}
+        </Button>
       </NavLink>
     ),
   },

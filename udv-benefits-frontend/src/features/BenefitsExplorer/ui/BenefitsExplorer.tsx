@@ -27,7 +27,7 @@ const BenefitsExplorer = ({ className }: BenefitsExplorerProps) => {
   );
 
   const handleAvailabilityChange = useCallback(
-    (availability: string) => {
+    (availability: "available" | "unavailable" | "active") => {
       setBenefitsAvailability(availability);
     },
     [setBenefitsAvailability]

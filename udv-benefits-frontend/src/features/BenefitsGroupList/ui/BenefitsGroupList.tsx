@@ -8,7 +8,7 @@ import { Button, Heading } from "shared/ui";
 interface BenefitsGroupListProps {
   className?: string;
   benefitsGroup: BenefitsGroup;
-  benefitsAvailability: string;
+  benefitsAvailability: "available" | "active" | "unavailable";
 }
 
 const BenefitsGroupList = ({
@@ -21,7 +21,10 @@ const BenefitsGroupList = ({
   return (
     <div className={classNames(cls.benefitsGroupList, {}, [className])}>
       <div className={cls.benefitsGroupListHeader}>
-        <Heading className={cls.benefitsCategoryTitle}>
+        <Heading
+          className={cls.benefitsCategoryTitle}
+          id={`${benefitsGroup.categoryId}`}
+        >
           {benefitsGroup.categoryTitle}
         </Heading>
         <NavLink
@@ -34,9 +37,12 @@ const BenefitsGroupList = ({
       </div>
 
       <ul className={cls.benefitsList} key={benefitsGroup.categoryId}>
-        {benefitsGroup.benefits.map((benefit) => (
+        {benefitsGroup.benefits.slice(0, 4).map((benefit) => (
           <li key={benefit.id}>
-            <BenefitCard benefitData={benefit} />
+            <BenefitCard
+              benefitData={benefit}
+              benefitsAvailability={benefitsAvailability}
+            />
           </li>
         ))}
       </ul>

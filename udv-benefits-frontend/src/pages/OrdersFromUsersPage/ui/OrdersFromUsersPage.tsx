@@ -5,9 +5,15 @@ import { useEffect, useMemo, useState } from "react";
 import api from "shared/api/api";
 // import ExpandingTable from "features/ExpandingTable";
 import { ColumnsConfig } from "shared/ui/Table/model/table.config";
-import { formatToLocalDate } from "shared/lib/formatters/formatDate";
+import {
+  formatDateToDot,
+  formatToLocalDate,
+  formatYears,
+  formatYearsAndMonths,
+} from "shared/lib/formatters/formatDate";
 import { Order } from "entities/order.model";
 import { ExpandableRowCell } from "shared/ui/Table/ui/Table";
+import { NavLink } from "react-router-dom";
 
 // const prepareTableData = (orders: Order[]) => {
 //   return orders.map((order) => ({
@@ -98,7 +104,8 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
     () => [
       {
         header: "ФИО",
-        render: (order) => order.user.firstName,
+        render: (order) =>
+          `${order.user.lastName} ${order.user.firstName} ${order.user.middleName}`,
       },
       {
         header: "Название",
@@ -148,6 +155,19 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
                 Отклонить
               </Button>
             )}
+
+            {order.status !== "in_work" && (
+              <NavLink to={`/orders/${order.id}`}>
+                <Button className={cls.leaveCommentButton} size="large">
+                  Оставить комментарий
+                  {order.unreadComments !== 0 && (
+                    <div className={cls.unreadCommentsCount}>
+                      {order.unreadComments}
+                    </div>
+                  )}
+                </Button>
+              </NavLink>
+            )}
           </div>
         ),
       },
@@ -166,7 +186,7 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
               <p>
                 <b>Юридическое лицо</b>
               </p>
-              <p>{order.user.firstName}</p>
+              <p>{order.user.legalEntity}</p>
             </div>
 
             <div>
@@ -201,14 +221,14 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
               <p>
                 <b>Дата рождения</b>
               </p>
-              <p>{order.user.birthDate}</p>
+              <p>{formatDateToDot(order.user.birthDate)}</p>
             </div>
 
             <div>
               <p>
                 <b>Возраст</b>
               </p>
-              <p>{order.user.birthDate}</p>
+              <p>{formatYears(order.user.age)}</p>
             </div>
           </div>
         ),
@@ -229,7 +249,12 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
               <p>
                 <b>Время работы в UDV</b>
               </p>
-              <p>{order.user.workExperience.months}</p>
+              <p>
+                {formatYearsAndMonths(
+                  order.user.workExperience.years,
+                  order.user.workExperience.months
+                )}
+              </p>
             </div>
 
             <div>
