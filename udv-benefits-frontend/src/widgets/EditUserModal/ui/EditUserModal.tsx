@@ -1,7 +1,7 @@
 import Input from "shared/ui/Input/Input";
 import cls from "./EditUserModal.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import { Button } from "shared/ui";
+import { Button, Heading } from "shared/ui";
 import { User } from "entities/user.model";
 import { ChangeEvent, useState } from "react";
 import api from "shared/api/api";
@@ -61,8 +61,8 @@ type EmployeeFormData = {
   phone: string;
   position: string;
   department: string;
-  hasChildren: string;
-  isAdmin: string;
+  hasChildren: boolean;
+  isAdmin: boolean;
   workStartDate: string;
   legalEntity: string;
 };
@@ -77,43 +77,34 @@ const EditUserModal = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EmployeeFormData>({});
-
-  const [formData, setFormData] = useState({
-    lastName: currentUser.lastName || "",
-    firstName: currentUser.firstName || "",
-    middleName: currentUser.middleName || "",
-    birthDate: currentUser.birthDate || "",
-    phone: currentUser.phone || "",
-    position: currentUser.position || "hr",
-    department: currentUser.department || "",
-    hasChildren: currentUser.hasChildren || false,
-    isAdmin: currentUser.isAdmin || false,
-    workStartDate: currentUser.workStartDate,
+  } = useForm<EmployeeFormData>({
+    defaultValues: {
+      lastName: currentUser.lastName || "",
+      firstName: currentUser.firstName || "",
+      middleName: currentUser.middleName || "",
+      birthDate: formatDateToDot(currentUser.birthDate) || "",
+      workStartDate: formatDateToDot(currentUser.workStartDate) || "",
+      legalEntity: currentUser.legalEntity || "",
+      department: currentUser.department || "",
+      position: currentUser.position || "",
+      phone: currentUser.phone || "",
+      isAdmin: currentUser.isAdmin || false,
+      hasChildren: currentUser.hasChildren || false,
+    },
   });
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: checked }));
-  };
-
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
 
   const onSubmit: SubmitHandler<EmployeeFormData> = async (data) => {
     console.log(data);
 
     try {
       const res = await api.patch(`/api/users/${currentUser.id}`, {
-        ...formData,
-        workStartDate: formatDate(formData.workStartDate),
+        ...data,
+        birthDate: data.birthDate
+          ? formatDate(data.birthDate)
+          : currentUser.birthDate,
+        workStartDate: data.workStartDate
+          ? formatDate(data.workStartDate)
+          : currentUser.workStartDate,
       });
 
       if (res) {
@@ -127,116 +118,134 @@ const EditUserModal = ({
   };
 
   return (
-    <div className={classNames(cls.editUserModal, {}, [className])}>
-      <form className={cls.editUserForm} onSubmit={handleSubmit(onSubmit)}>
-        <div className={cls.formInputRow}>
-          <label htmlFor="lastName">Фамилия</label>
-          <Input
-            name="lastName"
-            placeholder={currentUser.lastName}
-            onChange={handleInputChange}
-            {...register("lastName")}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="firstName">Имя</label>
-          <Input
-            name="firstName"
-            placeholder={currentUser.firstName}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="middleName">Отчество</label>
-          <Input
-            name="middleName"
-            placeholder={currentUser.middleName}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="birthDate">Дата рождения</label>
-          <Input
-            name="birthDate"
-            placeholder={currentUser.birthDate}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="phone">Телефон</label>
-          <Input
-            name="phone"
-            placeholder={currentUser.phone}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="position">Выберите должность</label>
-          <select name="position" id="" onChange={handleSelectChange}>
-            <option value="hr">hr</option>
-            <option value="backend">backend</option>
-            <option value="frontend">frontend</option>
-            <option value="tester">tester</option>
-            <option value="manager">manager</option>
-          </select>
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="department">Отдел</label>
-          <Input
-            name="department"
-            placeholder={currentUser.department || "Например, отдел разработки"}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <label htmlFor="department">Дата начала работы</label>
-          <Input
-            name="workStartDate"
-            placeholder={formatDateToDot(formData.workStartDate)}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className={cls.formInputRow}>
-          <div className={cls.inputCheckbox}>
-            <label htmlFor="hasChildren">Есть дети</label>
-            <input
-              name="hasChildren"
-              type="checkbox"
-              checked={formData.hasChildren}
-              onChange={handleCheckboxChange}
+    <div className={cls.modalOverlay}>
+      <div className={classNames(cls.editUserModal, {}, [className])}>
+        <form className={cls.editUserForm} onSubmit={handleSubmit(onSubmit)}>
+          <Heading>Редактирование профиля сотрудника</Heading>
+          <div className={cls.formInputRow}>
+            <label htmlFor="lastName">Фамилия</label>
+            <Input
+              name="lastName"
+              placeholder={currentUser.lastName || "Фамилия"}
+              {...register("lastName")}
             />
           </div>
-        </div>
 
-        <div className={cls.formInputRow}>
-          <div className={cls.inputCheckbox}>
-            <label htmlFor="isAdmin">Сотрудник является администратором</label>
-            <input
-              name="isAdmin"
-              type="checkbox"
-              checked={formData.isAdmin}
-              onChange={handleCheckboxChange}
+          <div className={cls.formInputRow}>
+            <label htmlFor="firstName">Имя</label>
+            <Input
+              name="firstName"
+              placeholder={currentUser.firstName || "Имя"}
+              {...register("firstName")}
             />
           </div>
-        </div>
 
-        <div className={cls.formButtons}>
-          <Button size="large" onClick={onClose}>
-            Отменить
-          </Button>
-          <Button type="submit" variant="primary" size="large">
-            Редактировать
-          </Button>
-        </div>
-      </form>
+          <div className={cls.formInputRow}>
+            <label htmlFor="middleName">Отчество</label>
+            <Input
+              name="middleName"
+              placeholder={currentUser.middleName || "Отчество"}
+              {...register("middleName")}
+            />
+          </div>
+
+          <div className={cls.formInputRow}>
+            <label htmlFor="birthDate">Дата рождения</label>
+            <Input
+              name="birthDate"
+              placeholder={formatDateToDot(currentUser.birthDate)}
+              {...register("birthDate")}
+            />
+          </div>
+
+          <div className={cls.formInputRow}>
+            <label htmlFor="phone">Телефон</label>
+            <Input
+              name="phone"
+              placeholder={currentUser.phone || "+1 (555) 000-0000"}
+              {...register("phone")}
+            />
+          </div>
+
+          <div className={cls.formInputRow}>
+            <label htmlFor="position">Выберите должность</label>
+            <select name="position" id="" {...register("position")}>
+              <option value="hr">hr</option>
+              <option value="backend">backend-разработчик</option>
+              <option value="frontend">frontend-разработчик</option>
+              <option value="tester">тестировщик</option>
+              <option value="manager">менеджер</option>
+            </select>
+          </div>
+
+          <div className={cls.formInputRow}>
+            <label htmlFor="department">Юридическое лицо</label>
+            <Input
+              name="legalEntity"
+              placeholder={
+                currentUser.legalEntity || "Например, ООО Сайберлимфа"
+              }
+              {...register("legalEntity")}
+            />
+          </div>
+
+          <div className={cls.formInputRow}>
+            <label htmlFor="department">Отдел</label>
+            <Input
+              name="department"
+              placeholder={
+                currentUser.department || "Например, отдел разработки"
+              }
+              {...register("department")}
+            />
+          </div>
+
+          <div className={cls.formInputRow}>
+            <label htmlFor="department">Дата начала работы</label>
+            <Input
+              name="workStartDate"
+              placeholder={formatDateToDot(currentUser.workStartDate)}
+              {...register("workStartDate")}
+            />
+          </div>
+
+          <div className={cls.formInputRow}>
+            <div className={cls.inputCheckbox}>
+              <label htmlFor="hasChildren">Есть дети</label>
+              <input
+                name="hasChildren"
+                type="checkbox"
+                // checked={formData.hasChildren}
+                {...register("hasChildren")}
+              />
+            </div>
+          </div>
+
+          <div className={cls.formInputRow}>
+            <div className={cls.inputCheckbox}>
+              <label htmlFor="isAdmin">
+                Сотрудник является администратором
+              </label>
+              <input
+                name="isAdmin"
+                type="checkbox"
+                // checked={formData.isAdmin}
+                // onChange={handleCheckboxChange}
+                {...register("isAdmin")}
+              />
+            </div>
+          </div>
+
+          <div className={cls.formButtons}>
+            <Button size="large" onClick={onClose}>
+              Отменить
+            </Button>
+            <Button type="submit" variant="primary" size="large">
+              Редактировать
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

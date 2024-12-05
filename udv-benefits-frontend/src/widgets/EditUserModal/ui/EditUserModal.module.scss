@@ -79,3 +79,14 @@ select {
   align-items: center;
   gap: 10px;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1); /* Полупрозрачный тёмный фон */
+  // backdrop-filter: blur(7px); /* Размытие заднего фона */
+  z-index: 100; /* Убедитесь, что overlay выше других элементов */
+}
