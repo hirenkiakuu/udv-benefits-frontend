@@ -9,12 +9,8 @@ import Arrow from "shared/assets/icons/arrow.svg";
 import { RootState } from "app/providers/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "app/providers/store/user.slice";
-
-const formatPeriod = (period: string) => {
-  if (period === "one_month") return "1 месяц";
-  else if (period === "three_months") return "3 месяца";
-  else return "1 год";
-};
+import { formatPeriod } from "shared/lib/formatters/formatDate";
+import PurchaseSuccessModal from "features/PurchaseSuccessModal";
 
 interface BenefitPageProps {
   className?: string;
@@ -24,10 +20,15 @@ const BenefitPage = ({ className }: BenefitPageProps) => {
   const [benefit, setBenefit] = useState<Benefit>();
   const [displayableOption, setDisplayableOption] = useState(0);
   const [chosenOptionId, setChosenOptionId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const params = useParams();
   const { id } = params;
   const { balance } = useSelector((s: RootState) => s.user.userProfile);
+
+  const handleOnClose = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const getBenefit = async () => {
@@ -56,6 +57,7 @@ const BenefitPage = ({ className }: BenefitPageProps) => {
       if (res) {
         console.log(res.data);
         dispatch(userActions.decreaseBalance(benefit.price));
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.error(error);
@@ -157,10 +159,14 @@ const BenefitPage = ({ className }: BenefitPageProps) => {
             onClick={handleBuyButtonClick}
             disabled={balance < benefit?.price}
           >
-            {balance < benefit?.price ? "Недостаточно U-points" : "Приобрести"}
+            {benefit?.requiredConditions
+              ? "Льгота недоступна"
+              : balance < benefit?.price
+                ? "Недостаточно U-points"
+                : "Приобрести"}
           </Button>
-          <div className={cls.requiredConditions}>
-            <ul className={cls.benefitOptionsButtonList}>
+          <div>
+            <ul className={cls.requiredConditions}>
               {benefit?.options.map((option) => (
                 <li key={option.id}>
                   <p className={cls.requiredCondition}>
@@ -168,10 +174,17 @@ const BenefitPage = ({ className }: BenefitPageProps) => {
                   </p>
                 </li>
               ))}
+              {benefit?.requiredConditions?.map((condition, index) => (
+                <li key={index}>
+                  <p className={cls.requiredCondition}>{condition}</p>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
+
+      {isModalOpen && <PurchaseSuccessModal onClose={handleOnClose} />}
     </div>
   );
 };

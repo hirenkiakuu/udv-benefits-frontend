@@ -4,6 +4,7 @@ export interface User {
   lastName: string;
   middleName: string;
   birthDate: string;
+  age: number;
   phone: string;
   hasChildren: boolean;
   isAdmin: boolean;
@@ -14,8 +15,9 @@ export interface User {
   department: string;
   id: number;
   balance: number;
+  legalEntity: string;
   workExperience: {
-    months: string;
-    years: string;
+    months: number;
+    years: number;
   };
 }

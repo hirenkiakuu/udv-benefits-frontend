@@ -29,3 +29,30 @@ export const formatToHours = (isoString: string) => {
 
   return timeString;
 };
+
+export const formatYears = (years: number) => {
+  if (years === 1) return `${years} год`;
+  if (years >= 2 && years <= 4) return `${years} года`;
+  return `${years} лет`;
+};
+
+export const formatYearsAndMonths = (years: number, months: number) => {
+  const yearString = formatYears(years);
+
+  let monthString;
+  if (months === 1) {
+    monthString = `${months} месяц`;
+  } else if (months >= 2 && months <= 4) {
+    monthString = `${months} месяца`;
+  } else {
+    monthString = `${months} месяцев`;
+  }
+
+  return `${yearString} ${monthString}`;
+};
+
+export const formatPeriod = (period: string) => {
+  if (period === "one_month") return "1 месяц";
+  else if (period === "three_months") return "3 месяца";
+  else return "1 год";
+};

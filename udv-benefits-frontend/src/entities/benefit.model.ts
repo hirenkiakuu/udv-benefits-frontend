@@ -3,11 +3,12 @@ export interface Category {
   id: number;
 }
 
-type Option = {
+export type Option = {
   id: number;
   title: string;
   description: string;
   requiredExperience: string;
+  requiredCondition: string;
 };
 
 export interface Benefit {
@@ -29,6 +30,7 @@ export interface Benefit {
     isCancellable: boolean;
   };
   options: Option[];
+  requiredConditions: string[];
 }
 
 export interface BenefitsGroup {
