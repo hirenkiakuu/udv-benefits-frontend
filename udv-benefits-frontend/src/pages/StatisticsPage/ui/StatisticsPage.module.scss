@@ -54,6 +54,13 @@
   font-weight: 600;
 }
 
+.statistics-rate-small {
+  font-size: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .show-more-button {
   border-radius: 4px;
   padding: 0px 18px;

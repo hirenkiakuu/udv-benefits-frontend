@@ -41,14 +41,23 @@ interface Statistics {
 interface StatisticsCardProps {
   statTitle: string;
   statData: string | number;
+  small?: boolean;
   className?: string;
 }
 
-const StatisticsCard = ({ statTitle, statData }: StatisticsCardProps) => {
+const StatisticsCard = ({
+  statTitle,
+  small,
+  statData,
+}: StatisticsCardProps) => {
   return (
     <div className={cls.statisticsCard}>
       <p className={cls.statisticsTitle}>{statTitle}</p>
-      <p className={cls.statisticsRate}>{statData}</p>
+      {small ? (
+        <p className={cls.statisticsRateSmall}>{statData}</p>
+      ) : (
+        <p className={cls.statisticsRate}>{statData}</p>
+      )}
     </div>
   );
 };
@@ -108,6 +117,7 @@ const StatisticsPage = ({ className }: StatisticsPageProps) => {
             />
             <StatisticsCard
               statTitle="Самая популярная льгота"
+              small={true}
               statData={statistics?.popularBenefit?.title || "Нет данных"}
             />
           </div>
