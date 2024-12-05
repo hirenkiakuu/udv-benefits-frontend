@@ -94,10 +94,7 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
         </Button>
       ),
     },
-    {
-      header: "Дата подачи заявки",
-      render: (user) => user.lastName,
-    },
+
     {
       header: "Статус сотрудника",
       render: (user) => <Badge status={user.isVerified} />,
