@@ -1,65 +1,138 @@
 import { Button, Heading } from "shared/ui";
-import cls from "./CreateBenefitModal.module.scss";
+import cls from "./EditBenefitModal.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import Input from "shared/ui/Input/Input";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import api from "shared/api/api";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { BenefitFormData } from "../model/BenefitFormSchema";
-import { useState } from "react";
+// import { BenefitFormData } from "../model/BenefitFormSchema";
+import { useEffect, useState } from "react";
+// import { Benefit } from "entities/benefit.model";
 
-interface CreateBenefitModalProps {
+export type BenefitFormData = {
+  title: string;
+  provider: string;
+  description: string;
+  price: number;
+  requiredExperience: string;
+  childsRequired: boolean;
+  categoryId: number;
+  isActive: boolean;
+  instructions: string;
+  period: string;
+  isCancellable: boolean;
+  image: File;
+  options: {
+    title: string;
+    description: string;
+    requiredExperience: string;
+  }[];
+};
+
+interface EditBenefitModalProps {
   className?: string;
+  editableBenefitId: number;
   onClose: () => void;
 }
 
-const CreateBenefitModal = ({
+const EditBenefitModal = ({
   className,
+  editableBenefitId,
   onClose,
-}: CreateBenefitModalProps) => {
-  const { register, handleSubmit, control, watch } = useForm<BenefitFormData>({
-    defaultValues: {
-      options: [],
-    },
-  });
+}: EditBenefitModalProps) => {
+  const { register, handleSubmit, control, watch, reset } =
+    useForm<BenefitFormData>({
+      defaultValues: {
+        title: "",
+        provider: "",
+        description: "",
+        price: undefined,
+        requiredExperience: "",
+        childsRequired: false,
+        categoryId: null,
+        period: "",
+        isCancellable: false,
+        // enableOptions: false,
+        options: [],
+        instructions: "",
+      },
+    });
 
   const isOptionsEnabled = watch("enableOptions" as keyof BenefitFormData);
+  //   const options = watch("options");
 
-  const { fields, append } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: "options", // Массив для вариантов льгот
   });
 
+  //   const [benefit, setBenefit] = useState<Benefit>();
+
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getBenefit = async () => {
+      try {
+        const res = await api.get(`api/benefits/${editableBenefitId}`);
+
+        if (res) {
+          const { data } = res;
+          //   setBenefit(data);
+
+          reset({
+            title: data.title,
+            provider: data.provider,
+            description: data.description,
+            price: data.price,
+            requiredExperience: data.requiredExperience,
+            childsRequired: data.childsRequired,
+            categoryId: data.categoryId,
+            period: data.content?.period,
+            isCancellable: data.content?.isCancellable,
+            // enableOptions: data.options?.length > 0,
+            options: data.options || [],
+            instructions: data.content?.instructions || "",
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getBenefit();
+  }, []);
 
   const onSubmit = async (data: BenefitFormData) => {
     console.log(data);
 
-    console.log(data.options);
+    // console.log(data.options);
 
-    const dataToSend = {
-      title: data.title,
-      provider: data.provider,
-      description: data.description,
-      price: data.price,
-      requiredExperience: data.requiredExperience || null,
-      childsRequired: data.childsRequired,
-      categoryId: data.categoryId,
-      isActive: true,
-      content: {
-        instructions: data.instructions || null,
-        period: data.period,
-        isCancellable: data.isCancellable,
-      },
-      options: data.options,
-    };
+    // const dataToSend = {
+    //   title: data.title,
+    //   provider: data.provider,
+    //   description: data.description,
+    //   price: data.price,
+    //   requiredExperience: data.requiredExperience || null,
+    //   childsRequired: data.childsRequired,
+    //   categoryId: data.categoryId,
+    //   isActive: true,
+    //   content: {
+    //     instructions: data.instructions || null,
+    //     period: data.period,
+    //     isCancellable: data.isCancellable,
+    //   },
+    //   options: data.options,
+    // };
 
-    console.log(dataToSend);
+    // console.log(dataToSend);
 
     try {
       // Отправка текстовых данных на создание льготы
-      const { data: respData } = await api.post("/api/benefits", dataToSend);
+      const { data: respData } = await api.patch(
+        `/api/benefits/${editableBenefitId}`,
+        data
+      );
 
       console.log(respData); // Ответ с информацией о созданной льготе
       const { id } = respData; // Получаем ID созданного бенефита
@@ -80,6 +153,8 @@ const CreateBenefitModal = ({
         if (res) {
           onClose();
         }
+      } else {
+        onClose();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -89,7 +164,7 @@ const CreateBenefitModal = ({
   return (
     <div className={cls.modalOverlay}>
       <div className={classNames(cls.createBenefitModal, {}, [className])}>
-        <Heading>Создание льготы</Heading>
+        <Heading>Редактирование льготы</Heading>
         <form
           className={cls.createBenefitForm}
           onSubmit={handleSubmit(onSubmit)}
@@ -255,114 +330,116 @@ const CreateBenefitModal = ({
             </div>
           </div>
 
-          <div className={cls.formInputRow}>
-            <div className={cls.inputCheckbox}>
-              <label htmlFor="">Несколько вариантов</label>
-              <input
-                type="checkbox"
-                {...register("enableOptions" as keyof BenefitFormData)}
-              />
-            </div>
+          {/* <div className={cls.formInputRow}>
+          <div className={cls.inputCheckbox}>
+            <label htmlFor="">Несколько вариантов</label>
+            <input
+              type="checkbox"
+              {...register("enableOptions" as keyof BenefitFormData)}
+            />
           </div>
+        </div> */}
 
           {isOptionsEnabled && <div className={cls.divider}></div>}
 
-          {isOptionsEnabled && (
-            <div className={cls.optionsSection}>
-              {fields.map((field, index) => (
-                <div key={field.id} className={cls.option}>
-                  <Heading size="medium" className={cls.optionHeading}>
-                    Вариант {index + 1}
-                  </Heading>
-                  <div className={cls.formInputRow}>
-                    <label htmlFor={`options.${index}.title`}>
-                      Название варианта
-                    </label>
-                    <Input
-                      {...register(`options.${index}.title`)}
-                      placeholder="Введите название варианта"
-                    />
-                  </div>
+          <div className={cls.optionsSection}>
+            {fields.map((field, index) => (
+              <div key={field.id} className={cls.option}>
+                <Heading size="medium" className={cls.optionHeading}>
+                  Вариант {index + 1}
+                </Heading>
+                <div className={cls.formInputRow}>
+                  <label htmlFor={`options.${index}.title`}>
+                    Название варианта
+                  </label>
+                  <Input
+                    {...register(`options.${index}.title`)}
+                    placeholder="Введите название варианта"
+                  />
+                </div>
 
-                  <div className={cls.formInputRow}>
-                    <label htmlFor={`options.${index}.description`}>
-                      Описание варианта
-                    </label>
-                    <Controller
-                      name={`options.${index}.description`}
-                      control={control}
-                      render={({ field }) => (
-                        <ReactQuill
-                          {...field}
-                          placeholder="Введите описание варианта"
-                          modules={{
-                            toolbar: [
-                              [{ header: "1" }, { header: "2" }],
-                              [{ list: "ordered" }, { list: "bullet" }],
-                              ["bold", "italic", "underline"],
-                              ["link"],
-                              [{ align: [] }],
-                            ],
-                          }}
-                        />
-                      )}
-                    />
-                  </div>
+                <div className={cls.formInputRow}>
+                  <label htmlFor={`options.${index}.description`}>
+                    Описание варианта
+                  </label>
+                  <Controller
+                    name={`options.${index}.description`}
+                    control={control}
+                    render={({ field }) => (
+                      <ReactQuill
+                        {...field}
+                        placeholder="Введите описание варианта"
+                        modules={{
+                          toolbar: [
+                            [{ header: "1" }, { header: "2" }],
+                            [{ list: "ordered" }, { list: "bullet" }],
+                            ["bold", "italic", "underline"],
+                            ["link"],
+                            [{ align: [] }],
+                          ],
+                        }}
+                      />
+                    )}
+                  />
+                </div>
 
-                  <div className={cls.formInputRow}>
-                    <label htmlFor={`options.${index}.requiredExperience`}>
-                      Необходимый стаж
-                    </label>
-                    <select
-                      {...register(`options.${index}.requiredExperience`)}
-                    >
-                      <option value="">Не требуется</option>
-                      <option value="one_month">1 месяц</option>
-                      <option value="three_months">3 месяца</option>
-                      <option value="six_months">6 месяцев</option>
-                      <option value="one_year">1 год</option>
-                    </select>
-                  </div>
+                <div className={cls.formInputRow}>
+                  <label htmlFor={`options.${index}.requiredExperience`}>
+                    Необходимый стаж
+                  </label>
+                  <select {...register(`options.${index}.requiredExperience`)}>
+                    <option value="">Не требуется</option>
+                    <option value="one_month">1 месяц</option>
+                    <option value="three_months">3 месяца</option>
+                    <option value="six_months">6 месяцев</option>
+                    <option value="one_year">1 год</option>
+                  </select>
+                </div>
 
-                  {/* <Button
+                {/* <Button
                   size="small"
-                  onClick={() => remove(index)}
+                  onClick={() => {
+                    remove(index);
+                    setValue(
+                      "options",
+                      fields.filter((_, i) => i !== index) // Убираем вариант из состояния
+                    );
+                  }}
                   variant="danger"
                 >
                   Удалить вариант
                 </Button> */}
 
-                  <div
-                    className={cls.divider}
-                    style={{ marginTop: "24px" }}
-                  ></div>
-                </div>
-              ))}
+                <div
+                  className={cls.divider}
+                  style={{ marginTop: "24px" }}
+                ></div>
+              </div>
+            ))}
 
-              <Button
-                size="small"
-                type="button"
-                variant="primary"
-                style={{ marginTop: "40px" }}
-                onClick={() =>
-                  append({
-                    title: "",
-                    description: "",
-                    requiredExperience: "",
-                  })
-                }
-              >
-                Добавить вариант
-              </Button>
-            </div>
-          )}
+            {/* <Button
+              size="small"
+              type="button"
+              variant="primary"
+              style={{ marginTop: "40px" }}
+              onClick={() =>
+                append({
+                  title: "",
+                  description: "",
+                  requiredExperience: "",
+                })
+              }
+            >
+              Добавить вариант
+            </Button> */}
+          </div>
 
           <div className={cls.formButtons}>
             <Button size="large" onClick={onClose}>
               Отменить
             </Button>
             <Button variant="primary" size="large" type="submit">
-              Создать
+              Редактировать
             </Button>
           </div>
         </form>
@@ -371,4 +448,4 @@ const CreateBenefitModal = ({
   );
 };
 
-export default CreateBenefitModal;
+export default EditBenefitModal;

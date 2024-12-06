@@ -146,16 +146,6 @@ const OrdersFromUsersPage = ({ className }: OrdersFromUsersPageProps) => {
               </>
             )}
 
-            {order.status === "approved" && (
-              <Button
-                variant="danger"
-                size="large"
-                onClick={() => handleReject(order.id)}
-              >
-                Отклонить
-              </Button>
-            )}
-
             {order.status !== "in_work" && (
               <NavLink to={`/orders/${order.id}`}>
                 <Button className={cls.leaveCommentButton} size="large">

@@ -36,6 +36,11 @@
   width: 400px;
   height: 400px;
   object-fit: cover;
+
+  @media (max-width: 1600px) {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 .benefit-info {
@@ -80,6 +85,10 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  @media (max-width: 1600px) {
+    min-width: 300px;
+  }
 }
 
 .benefit-price {

@@ -4,7 +4,7 @@
 }
 
 .statistics-page-container-inner {
-  padding: 20px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -14,6 +14,7 @@
 .categories-cards-container {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .categories-cards-container {

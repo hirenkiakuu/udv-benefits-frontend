@@ -1,3 +1,7 @@
+.benefits-explorer {
+  max-width: 100%;
+}
+
 .filter-panel {
   margin-left: 48px;
 }
@@ -5,11 +9,18 @@
 .benefits-board {
   display: flex;
   gap: 47px;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden; /* Прячет всё, что выходит за пределы контейнера */
+  position: relative;
 }
 
 .benefit-carousels {
-  width: 100%;
+  // width: calc(100% - 360px);
   display: flex;
   flex-direction: column;
   gap: 32px;
+  // width: 100%; /* Занимает всю ширину родителя */
+  max-width: 100%; /* Убедитесь, что дочерние элементы не превышают ширину */
+  overflow: hidden; /* Скрывает контент, который не помещается */
 }

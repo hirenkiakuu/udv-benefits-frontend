@@ -12,10 +12,8 @@ const EmailLoginSection = ({ className }: EmailLoginSectionProps) => {
   return (
     <div className={classNames(cls.emailLoginSection, {}, [className])}>
       <div className={cls.greeting}>
-        <Heading>С возвращением в кафетерий льгот!</Heading>
-        <Heading size="medium">
-          Введите свою электронную почту, чтобы продолжить
-        </Heading>
+        <Heading size="medium">С возвращением в кафетерий льгот!</Heading>
+        <p>Введите свою электронную почту, чтобы продолжить</p>
       </div>
 
       <EmailForm submitAction="request" buttonText="Войти" />
@@ -23,9 +21,6 @@ const EmailLoginSection = ({ className }: EmailLoginSectionProps) => {
       <div className={cls.helpLinks}>
         <NavLink to="/register">
           Нет аккаунта? <b>Зарегистрироваться</b>
-        </NavLink>
-        <NavLink to="/not-implemented">
-          Возникла проблема? <b>Обратитесь к техподдержке</b>
         </NavLink>
       </div>
     </div>

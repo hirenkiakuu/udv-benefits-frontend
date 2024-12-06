@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import CreateBenefitModal from "widgets/CreateBenefitModal";
 import { ColumnsConfig } from "shared/ui/Table/model/table.config";
 import { formatToLocalDate } from "shared/lib/formatters/formatDate";
+import EditBenefitModal from "widgets/EditBenefitModal";
 
 interface MyBenefitsPageProps {
   className?: string;
@@ -16,6 +17,11 @@ interface MyBenefitsPageProps {
 const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
   const [myBenefits, setMyBenefits] = useState<Benefit[]>();
   const [isBenefitModalVisible, setIsBenefitModalVisible] = useState(false);
+  const [isEditBenefitModalVisible, setIsEditBenefitModalVisible] =
+    useState(false);
+  const [editableBenefitId, setEditableBenefitId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     const getMyBenefits = async () => {
@@ -40,11 +46,13 @@ const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
 
   const handleOnCloseClick = () => {
     setIsBenefitModalVisible(false);
+    setIsEditBenefitModalVisible(false);
   };
 
   const editBenefitClick = (id: number) => {
+    setIsEditBenefitModalVisible(true);
+    setEditableBenefitId(id);
     console.log(id);
-    console.log("---");
   };
 
   const columnsConfig: ColumnsConfig<Benefit> = useMemo(
@@ -102,6 +110,15 @@ const MyBenefitsPage = ({ className }: MyBenefitsPageProps) => {
       {isBenefitModalVisible &&
         createPortal(
           <CreateBenefitModal onClose={handleOnCloseClick} />,
+          document.getElementById("create-benefit-modal")
+        )}
+
+      {isEditBenefitModalVisible &&
+        createPortal(
+          <EditBenefitModal
+            editableBenefitId={editableBenefitId}
+            onClose={handleOnCloseClick}
+          />,
           document.getElementById("create-benefit-modal")
         )}
     </div>

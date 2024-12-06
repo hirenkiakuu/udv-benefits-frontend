@@ -3,7 +3,6 @@ import cls from "./EditUserModal.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import { Button, Heading } from "shared/ui";
 import { User } from "entities/user.model";
-import { ChangeEvent, useState } from "react";
 import api from "shared/api/api";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -73,11 +72,7 @@ const EditUserModal = ({
   currentUser,
   onUserUpdate,
 }: EditUserModalProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<EmployeeFormData>({
+  const { register, handleSubmit } = useForm<EmployeeFormData>({
     defaultValues: {
       lastName: currentUser.lastName || "",
       firstName: currentUser.firstName || "",

@@ -1,6 +1,6 @@
 import cls from "./LoginPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
-import Logo from "shared/assets/images/Logo.png";
+import Logo from "shared/assets/images/LogoWithCompanyName.png";
 import { Outlet } from "react-router-dom";
 
 interface LoginPageProps {

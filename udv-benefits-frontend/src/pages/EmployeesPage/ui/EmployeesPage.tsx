@@ -80,7 +80,8 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
   const columnsConfig: ColumnsConfig<User> = [
     {
       header: "ФИО",
-      render: (user) => `${user.firstName} ${user.middleName} ${user.lastName}`,
+      render: (user) =>
+        ` ${user.lastName} ${user.firstName} ${user.middleName}`,
     },
     {
       header: "",
@@ -94,7 +95,10 @@ const EmployeesPage = ({ className }: EmployeesPageProps) => {
         </Button>
       ),
     },
-
+    // {
+    //   header: "Дата подачи заявки",
+    //   render: (user) => ,
+    // },
     {
       header: "Статус сотрудника",
       render: (user) => <Badge status={user.isVerified} />,

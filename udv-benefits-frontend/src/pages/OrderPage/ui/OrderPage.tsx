@@ -21,7 +21,7 @@ const formatPeriod = (period: string) => {
 const formatStatus = (status: string) => {
   if (status === "approved") return "Одобрено";
   else if (status === "rejected") return "Отклонено";
-  else return "В рассмотрении";
+  else return "На рассмотрении";
 };
 
 const OrderPage = ({ className }: OrderPageProps) => {

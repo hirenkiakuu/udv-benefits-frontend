@@ -12,7 +12,7 @@ export const employeeDetailsSchema = z.object({
   workStartDate: z
     .string()
     .transform((val) => (val.trim() === "" ? null : val)),
-  legalEntity: z.string().transform((val) => (val.trim() === "" ? null : val)),
+  legalEntity: z.string().min(1, "Юр лицо не может быть пустым"),
   department: z.string().transform((val) => (val.trim() === "" ? null : val)),
   position: z.string().transform((val) => (val.trim() === "" ? null : val)),
   phone: z.string().min(1, "Номер телефона не может быть пустым"),

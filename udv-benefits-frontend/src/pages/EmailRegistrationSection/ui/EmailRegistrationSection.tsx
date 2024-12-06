@@ -27,9 +27,6 @@ const EmailRegistrationSection = ({
         <NavLink to="/login">
           Уже есть аккаунт? <b>Войти</b>
         </NavLink>
-        <NavLink to="/not-implemented">
-          Возникла проблема? <b>Обратитесь к техподдержке</b>
-        </NavLink>
       </div>
     </div>
   );

@@ -40,7 +40,9 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         email,
         ...data,
         birthDate: formatDate(data.birthDate),
-        workStartDate: formatDate(data.workStartDate),
+        workStartDate: data.workStartDate
+          ? formatDate(data.workStartDate)
+          : null,
       });
 
       if (res) {
@@ -125,8 +127,12 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
           <Input
             name="ЮрЛицо"
             placeholder="ООО Сайберлимфа"
+            danger={!!errors.legalEntity}
             {...register("legalEntity")}
           />
+          {errors.legalEntity && (
+            <p className="error-message">{errors.legalEntity.message}</p>
+          )}
         </div>
       </div>
 
@@ -141,12 +147,21 @@ const EmployeeDetailsForm = ({ className }: EmployeeDetailsFormProps) => {
         </div>
 
         <div className={cls.formInput}>
-          <label htmlFor="">Должность</label>
-          <Input
+          <label htmlFor="position">Выберите должность</label>
+          <select
+            className={cls.selectInput}
             name="position"
-            placeholder="Дизайнер"
+            id=""
             {...register("position")}
-          />
+          >
+            <option value="hr" selected>
+              hr
+            </option>
+            <option value="backend">backend-разработчик</option>
+            <option value="frontend">frontend-разработчик</option>
+            <option value="tester">тестировщик</option>
+            <option value="manager">менеджер</option>
+          </select>
         </div>
       </div>
 
