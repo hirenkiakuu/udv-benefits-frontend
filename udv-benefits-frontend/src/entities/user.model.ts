@@ -20,4 +20,5 @@ export interface User {
     months: number;
     years: number;
   };
+  profilePhoto: string;
 }

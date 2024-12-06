@@ -35,6 +35,7 @@ const initialState: UserState = {
     },
     age: null,
     legalEntity: null,
+    profilePhoto: null,
   },
 };
 

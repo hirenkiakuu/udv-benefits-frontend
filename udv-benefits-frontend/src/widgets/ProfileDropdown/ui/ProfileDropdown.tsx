@@ -16,7 +16,7 @@ const ProfileDropdown = ({ className }: ProfileDropdownProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch();
-  const { firstName, lastName, email, balance } = useSelector(
+  const { firstName, lastName, email, balance, profilePhoto } = useSelector(
     (s: RootState) => s.user.userProfile
   );
 
@@ -39,7 +39,11 @@ const ProfileDropdown = ({ className }: ProfileDropdownProps) => {
         className={cls.dropdownToggleButton}
         onClick={() => setIsVisible((prevState) => !prevState)}
       >
-        <img src={Avatar} alt="Изображение профиля" />
+        <img
+          className={cls.profilePhoto}
+          src={profilePhoto || Avatar}
+          alt="Изображение профиля"
+        />
       </button>
 
       {isVisible && (
@@ -47,7 +51,8 @@ const ProfileDropdown = ({ className }: ProfileDropdownProps) => {
           <div className={cls.profileDropdownMenuHeader}>
             {/*возможно не по бэму*/}
             <img
-              src={Avatar}
+              className={cls.profilePhoto}
+              src={profilePhoto || Avatar}
               alt="Аватар пользователя"
               width="48px"
               height="48px"
