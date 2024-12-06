@@ -112,7 +112,7 @@ const StatisticsPage = ({ className }: StatisticsPageProps) => {
               statData={statistics?.totalUsers}
             />
             <StatisticsCard
-              statTitle="Всего льгот (включая неактивные)"
+              statTitle="Всего льгот"
               statData={statistics?.totalBenefits}
             />
             <StatisticsCard
